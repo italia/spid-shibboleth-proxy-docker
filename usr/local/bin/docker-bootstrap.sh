@@ -7,7 +7,7 @@ _KEY_FILE="${_CERTS_DIR}/sp-key.pem"
 _METADATA_DIR="/opt/shibboleth-sp/metadata"
 
 _ENTITY_ID="https://auth.example.com/sp"
-_HOSTNAME="http://131.1.253.175:8080"
+_HOSTNAME="131.1.253.175:8080"
 _SPID_ACS=${SPID_ACS:-""}
 
 export LD_LIBRARY_PATH=/opt/shibboleth/lib64:${LD_LIBRARY_PATH}
@@ -16,10 +16,13 @@ export LD_LIBRARY_PATH=/opt/shibboleth/lib64:${LD_LIBRARY_PATH}
 # renew certificates
 #
 pushd /etc/shibboleth
-./keygen.sh -f \
-    -e ${_ENTITY_ID} \
-    -h ${_HOSTNAME} \
-    -o ${_CERTS_DIR}
+if [ ! -f ${_CERT_FILE} ] && [ ! -f ${_KEY_FILE} ]
+then
+    ./keygen.sh -f \
+        -e ${_ENTITY_ID} \
+        -h ${_HOSTNAME} \
+        -o ${_CERTS_DIR}
+fi
 popd
 
 #
