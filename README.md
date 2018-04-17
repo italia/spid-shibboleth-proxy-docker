@@ -22,7 +22,11 @@
 
     then run the container
 
-        $ docker run -ti --rm -e SPID_ACS="`cat myacs.xml`" -p 8080:80 spid-auth-proxy
+        $ docker run -ti --rm -p 8080:80 \
+            -e SPID_ACS="`cat myacs.xml`" \
+            -e TARGET_LOCATION="/myapp" \
+            -e TARGET_BACKEND="https://backend.example.com:8443/myapp" \
+            spid-auth-proxy
 
 3.  Open your browser (or `curl`) and check if the metadata were generated
 
