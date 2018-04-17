@@ -22,7 +22,7 @@
 		<samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" 
             xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
             Version="2.0" ID="auth.example.com" IssueInstant="1970-01-01T00:00:00Z"
-		    AttributeConsumingServiceIndex="0" ForceAuthn="true">
+		    AttributeConsumingServiceIndex="1" ForceAuthn="true">
             <saml:Issuer
                 Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity"
                 NameQualifier="https://auth.example.com/sp">
@@ -58,20 +58,30 @@
                session="loginError.html"
 	       ssl="genericError.html"
 	       metadata="genericError.html"/>
-  <!-- Utilizzo con unico metadata -->
-	<MetadataProvider type="XML" 
+       <!-- Utilizzo con unico metadata -->
+
+        <MetadataProvider type="XML"
             validate="true"
             uri="https://auth.agid.gov.it/spid-entities-idps.xml"
             backingFilePath="spid-entities-idps.xml"
-            reloadInterval="3600">
-        </MetadataProvider>
+            reloadInterval="3600" />
+
+        <MetadataProvider
+            type="XML"
+            validate="true"
+            file="/opt/shibboleth-sp/metadata/idp.spid.gov.it.xml"
+            id="https://idp.spid.gov.it" />
+
         <!-- Attributes -->
         <AttributeExtractor type="XML" validate="true" reloadChanges="true" path="attribute-map.xml"/>
         <AttributeResolver type="Query" subjectMatch="true"/>
         <AttributeFilter type="XML" validate="true" path="attribute-policy.xml"/>
 
         <!-- Assertion signing cert -->
-        <CredentialResolver type="File" key="sp-key.pem" certificate="sp-cert.pem" use="signing"/>
+        <CredentialResolver type="File"
+            key="/opt/shibboleth-sp/certs/sp-key.pem"
+            certificate="/opt/shibboleth-sp/certs/sp-cert.pem"
+            use="signing"/>
     
     </ApplicationDefaults>
 
