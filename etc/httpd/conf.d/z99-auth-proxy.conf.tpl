@@ -6,8 +6,8 @@
             SSLProxyCheckPeerName Off
         </IfModule>
 
-        ProxyPreserveHost On
-        ProxyRequests On
+        ProxyPreserveHost Off
+        ProxyRequests Off
 
         <Location "%TARGET_LOCATION%">
             AuthType shibboleth

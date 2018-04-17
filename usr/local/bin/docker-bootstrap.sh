@@ -62,7 +62,7 @@ popd
 #
 # generate proxy configuration
 #
-_TARGET_LOCATION=${TARGET_LOCATION:-"/secure"}
+_TARGET_LOCATION=${TARGET_LOCATION:-"/"}
 _TARGET_BACKEND=${TARGET_BACKEND:-"http://secure.example.com"}
 pushd /etc/httpd/conf.d
 sed \
