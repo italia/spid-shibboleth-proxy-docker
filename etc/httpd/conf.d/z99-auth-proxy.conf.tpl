@@ -13,9 +13,10 @@
             AuthType shibboleth
             ShibRequestSetting requireSession 1
             Require shib-session
+            ShibUseHeaders On
+
             ProxyPass %TARGET_BACKEND%
             ProxyPassReverse %TARGET_BACKEND%
         </Location>
     </IfModule>
 </IfModule>
-
