@@ -6,8 +6,8 @@ _KEY_FILE="${_CERTS_DIR}/sp-key.pem"
 
 _METADATA_DIR="/opt/shibboleth-sp/metadata"
 
-_ENTITY_ID="https://auth.example.com/sp"
-_HOSTNAME="131.1.253.175:8080"
+_ENTITY_ID=${ENTITY_ID:-"https://auth.example.com/sp"}
+_CN=${CN:-"localhost"}
 _SPID_ACS=${SPID_ACS:-""}
 
 export LD_LIBRARY_PATH=/opt/shibboleth/lib64:${LD_LIBRARY_PATH}
@@ -20,7 +20,7 @@ if [ ! -f ${_CERT_FILE} ] && [ ! -f ${_KEY_FILE} ]
 then
     ./keygen.sh -f \
         -e ${_ENTITY_ID} \
-        -h ${_HOSTNAME} \
+        -h ${_CN} \
         -o ${_CERTS_DIR}
 fi
 popd
@@ -37,7 +37,7 @@ _ID=`cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 43 | head -n 1`
 pushd /etc/shibboleth
 ./metagen.sh \
     -c ${_CERT_FILE} \
-    -h ${_HOSTNAME} \
+    -h ${_CN} \
     -e ${_ENTITY_ID} \
     -L \
     -f urn:oasis:names:tc:SAML:2.0:nameid-format:transient \
@@ -63,16 +63,37 @@ samlsign \
 popd
 
 #
+# generate Shibboleth SP configuration
+#
+pushd /etc/shibboleth
+sed \
+    -e "s|%ENTITY_ID%|${_ENTITY_ID}|g" \
+    -e "s|%CN%|${_CN}|g" \
+    shibboleth2.xml.tpl > shibboleth2.xml
+popd
+
+#
 # generate proxy configuration
 #
-_TARGET_LOCATION=${TARGET_LOCATION:-"/"}
-_TARGET_BACKEND=${TARGET_BACKEND:-"http://secure.example.com"}
+_TARGET_LOCATION=${TARGET_LOCATION:-"/target"}
+_TARGET_BACKEND=${TARGET_BACKEND:-"http://localhost:8080"}
 pushd /etc/httpd/conf.d
 sed \
     -e "s|%TARGET_LOCATION%|${_TARGET_LOCATION}|g" \
     -e "s|%TARGET_BACKEND%|${_TARGET_BACKEND}|g" \
     z99-auth-proxy.conf.tpl > z99-auth-proxy.conf
 popd
+
+#
+# generate access page
+#
+pushd /var/www/html/access
+sed \
+    -e "s|%TARGET_LOCATION%|${_TARGET_LOCATION}|g" \
+    -e "s|%CN%|${_CN}|g" \
+    index.html.tpl > index.html
+popd
+
 #
 # killing existing shibd (if any)
 #
