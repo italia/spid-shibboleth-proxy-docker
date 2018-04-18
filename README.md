@@ -35,6 +35,10 @@
 
 5.  Run the container as follows
 
+        $ make run
+
+        or
+
         $ docker run -ti --rm \
             -p 80:80 -p 443:443 \
             -e SPID_ACS="`cat myacs.xml`" \
@@ -46,6 +50,10 @@
 6.  Open your browser (or `curl`) and check if the metadata were generated
 
         $ curl -L -k https://11.22.33.44/metadata
+
+    If you like pretty printing
+
+        $ curl -L -k https://11.22.33.44/metadata | xmllint --format -
 
 7.  Before going ahead, you need to register your authentication proxy as
     service provider. Go to https://idp.spid.gov.it:8080 and register your

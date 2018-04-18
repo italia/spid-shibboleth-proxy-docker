@@ -1,0 +1,12 @@
+<md:AttributeConsumingService index="1">
+  <md:ServiceName xml:lang="it">set1</md:ServiceName>
+  <md:RequestedAttribute Name="name"/>
+  <md:RequestedAttribute Name="familyName"/>
+  <md:RequestedAttribute Name="fiscalNumber"/>
+  <md:RequestedAttribute Name="email"/>
+</md:AttributeConsumingService>
+<md:AttributeConsumingService index="2">
+  <md:ServiceName xml:lang="it">set2</md:ServiceName>
+  <md:RequestedAttribute Name="spidCode"/>
+  <md:RequestedAttribute Name="fiscalNumber"/>
+</md:AttributeConsumingService>
