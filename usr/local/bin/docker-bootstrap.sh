@@ -82,6 +82,20 @@ sed \
     -e "s|%TARGET_LOCATION%|${_TARGET_LOCATION}|g" \
     -e "s|%TARGET_BACKEND%|${_TARGET_BACKEND}|g" \
     z99-auth-proxy.conf.tpl > z99-auth-proxy.conf
+
+sed \
+    -e "s|%CN%|${_CN}|g" \
+    z97-servername.conf.tpl > z97-servername.conf
+popd
+
+#
+# renew self-signed TLS certificates
+#
+pushd /etc/pki/tls
+    openssl req -x509 -nodes -days 3650 \
+        -newkey rsa:2048 -keyout private/localhost.key \
+        -out certs/localhost.crt \
+        -subj "/CN=${_CN}"
 popd
 
 #
