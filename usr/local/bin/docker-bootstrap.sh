@@ -12,6 +12,28 @@ _SPID_ACS=${SPID_ACS:-""}
 
 export LD_LIBRARY_PATH=/opt/shibboleth/lib64:${LD_LIBRARY_PATH}
 
+##
+## HTTPD configuration
+##
+
+_SERVER_NAME=${SERVER_NAME:-"www.to.be.set.it"}
+
+#
+# setup TLS certificates
+#
+TLS_CERT="/etc/pki/tls/certs/server.crt"
+TLS_KEY="/etc/pki/tls/private/server.key"
+if [ ! -f ${TLS_CERT} ] && [ ! -f ${TLS_KEY} ]; then
+    openssl req -x509 -nodes -days 3650 \
+        -newkey rsa:2048 -keyout ${TLS_KEY} \
+        -out ${TLS_CERT} \
+        -subj "/CN=${_SERVER_NAME}"
+fi
+
+##
+## SHIBD configuration
+##
+
 #
 # renew certificates
 #
@@ -86,16 +108,6 @@ sed \
 sed \
     -e "s|%CN%|${_CN}|g" \
     z97-servername.conf.tpl > z97-servername.conf
-popd
-
-#
-# renew self-signed TLS certificates
-#
-pushd /etc/pki/tls
-    openssl req -x509 -nodes -days 3650 \
-        -newkey rsa:2048 -keyout private/localhost.key \
-        -out certs/localhost.crt \
-        -subj "/CN=${_CN}"
 popd
 
 #
