@@ -18,6 +18,7 @@ export LD_LIBRARY_PATH=/opt/shibboleth/lib64:${LD_LIBRARY_PATH}
 
 _SERVER_NAME=${SERVER_NAME:-"www.to.be.set.it"}
 _TARGET_BACKEND=${TARGET_BACKEND:-"https://backend.to.be.set.it"}
+_TARGET_LOCATION=${TARGET_LOCATION:-"/login"}
 
 #
 # set httpd envvars
@@ -40,6 +41,16 @@ if [ ! -f ${TLS_CERT} ] && [ ! -f ${TLS_KEY} ]; then
         -out ${TLS_CERT} \
         -subj "/CN=${_SERVER_NAME}"
 fi
+
+#
+# generate access page
+#
+pushd /var/www/html/access
+sed \
+    -e "s|%TARGET_LOCATION%|${_TARGET_LOCATION}|g" \
+    -e "s|%SERVER_NAME%|${_SERVER_NAME}|g" \
+    index.html.tpl > index.html
+popd
 
 ##
 ## SHIBD configuration
@@ -105,15 +116,6 @@ sed \
     shibboleth2.xml.tpl > shibboleth2.xml
 popd
 
-#
-# generate access page
-#
-pushd /var/www/html/access
-sed \
-    -e "s|%TARGET_LOCATION%|${_TARGET_LOCATION}|g" \
-    -e "s|%CN%|${_CN}|g" \
-    index.html.tpl > index.html
-popd
 
 #
 # killing existing shibd (if any)
