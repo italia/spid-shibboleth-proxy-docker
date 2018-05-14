@@ -17,6 +17,17 @@ export LD_LIBRARY_PATH=/opt/shibboleth/lib64:${LD_LIBRARY_PATH}
 ##
 
 _SERVER_NAME=${SERVER_NAME:-"www.to.be.set.it"}
+_TARGET_BACKEND=${TARGET_BACKEND:-"https://backend.to.be.set.it"}
+
+#
+# set httpd envvars
+#
+_HTTPD_ENVVAR="/etc/httpd/conf.d/z00-envvar.conf"
+
+if [ ! -f ${_HTTPD_ENVVAR} ]; then
+    echo "Define X_SERVER_NAME ${_SERVER_NAME}" >> ${_HTTPD_ENVVAR}
+    echo "Define X_TARGET_BACKEND ${_TARGET_BACKEND}" >> ${_HTTPD_ENVVAR}
+fi
 
 #
 # setup TLS certificates
@@ -98,16 +109,11 @@ popd
 # generate proxy configuration
 #
 _TARGET_LOCATION=${TARGET_LOCATION:-"/target"}
-_TARGET_BACKEND=${TARGET_BACKEND:-"http://localhost:8080"}
 pushd /etc/httpd/conf.d
 sed \
     -e "s|%TARGET_LOCATION%|${_TARGET_LOCATION}|g" \
     -e "s|%TARGET_BACKEND%|${_TARGET_BACKEND}|g" \
     z99-auth-proxy.conf.tpl > z99-auth-proxy.conf
-
-sed \
-    -e "s|%CN%|${_CN}|g" \
-    z97-servername.conf.tpl > z97-servername.conf
 popd
 
 #
