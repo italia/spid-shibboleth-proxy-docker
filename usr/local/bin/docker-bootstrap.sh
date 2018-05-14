@@ -106,17 +106,6 @@ sed \
 popd
 
 #
-# generate proxy configuration
-#
-_TARGET_LOCATION=${TARGET_LOCATION:-"/target"}
-pushd /etc/httpd/conf.d
-sed \
-    -e "s|%TARGET_LOCATION%|${_TARGET_LOCATION}|g" \
-    -e "s|%TARGET_BACKEND%|${_TARGET_BACKEND}|g" \
-    z99-auth-proxy.conf.tpl > z99-auth-proxy.conf
-popd
-
-#
 # generate access page
 #
 pushd /var/www/html/access
