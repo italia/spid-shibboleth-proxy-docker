@@ -22,18 +22,23 @@
 
 3.  Create an environment file (e.g. `environment.env`) like the following
 
-        CN=11.22.33.44
+        SERVER_NAME=<REACHABLE IP OR FQDN>
         ENTITY_ID=https://my.auth.proxy.com
         TARGET_BACKEND=https://mytargetapp.my.cloud.provider.com
-        TARGET_LOCATION=/mytargetapp
+        TARGET_LOCATION=/login
 
-4.  Create a directory (e.g. `certs`) to store SAML certificates and append
-    it to `.dockerignore` file
+4.  Create a directory (e.g. `certs`) to store SAML/TLS certificatestls. The
+    repository already provides this directory just of testing. Feel free to
+    customise it according to your environment
 
-        $ mkdir certs
-        $ echo "certs" >> .dockerignore
+        $ mkdir -vp certs/{tls,saml}
 
-5.  Run the container as follows
+    then create (or upload) your TLS certificate
+
+        $ cd certs/tls
+        $ make
+
+5.  Run the container as follows (remember to check the mounted paths)
 
         $ make run
 
@@ -43,7 +48,9 @@
             -p 80:80 -p 443:443 \
             -e SPID_ACS="`cat myacs.xml`" \
             --env-file environment.env \
-            -v "$(pwd)/certs:/opt/shibboleth-sp/certs" \
+            -v "$(pwd)/certs/saml:/opt/shibboleth-sp/certs" \
+            -v "$(pwd)/certs/tls/server.crt:/etc/pki/tls/certs/server.crt:ro" \
+            -v "$(pwd)/certs/tls/server.key:/etc/pki/tls/private/server.key:ro" \
             -v "$(pwd)/log:/var/log" \
             spid-auth-proxy
 
@@ -58,12 +65,12 @@
 7.  Before going ahead, you need to register your authentication proxy as
     service provider. Go to https://idp.spid.gov.it:8080 and register your
     proxy by reading the information from the metadata. If you do not change
-    the value of `ENTITY_ID` and `CN` as well as the certificates, this step
-    has to be executed just the first time.
+    the value of `ENTITY_ID` and `SERVER_NAME` as well as the certificates,
+    this step has to be executed just the first time.
 
 8.  Open in your browser
 
-        https://11.22.33.44/access
+        https://<SERVER_NAME>/access
 
     and start the authentication process with `lucia` and `password123`
     as username and password by using one of the two links.
