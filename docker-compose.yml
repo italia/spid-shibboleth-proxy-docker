@@ -1,0 +1,51 @@
+# Copyright 2018 AgID - Agenzia per l'Italia Digitale
+#
+# Licensed under the EUPL, Version 1.2 or - as soon they will be approved by
+# the European Commission - subsequent versions of the EUPL (the "Licence").
+#
+# You may not use this work except in compliance with the Licence.
+#
+# You may obtain a copy of the Licence at:
+#
+#    https://joinup.ec.europa.eu/software/page/eupl
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the Licence is distributed on an "AS IS" basis, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# Licence for the specific language governing permissions and limitations
+# under the Licence.
+
+version: '3'
+
+services:
+  authproxy:
+    image: spid-auth-proxy
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - '/path/to/certs/saml:/opt/shibboleth-sp/certs:ro'
+      - '/path/to/certs/tls/server.crt:/etc/pki/tls/certs/server.crt:ro'
+      - '/path/to/certs/tls/server.key:/etc/pki/tls/private/server.key:ro'
+      - '/path/to/log:/var/log'
+    environment:
+      SERVER_NAME: 'my.auth.proxy.com'
+      ENTITY_ID: 'https://my.auth.proxy.com'
+      TARGET_BACKEND: 'https://mytargetapp.my.cloud.provider.com'
+      TARGET_LOCATION: '/login'
+      SPID_ACS: |
+        <md:AttributeConsumingService index="1">
+          <md:ServiceName xml:lang="it">set1</md:ServiceName>
+          <md:RequestedAttribute Name="name"/>
+          <md:RequestedAttribute Name="familyName"/>
+          <md:RequestedAttribute Name="fiscalNumber"/>
+          <md:RequestedAttribute Name="email"/>
+        </md:AttributeConsumingService>
+        <md:AttributeConsumingService index="2">
+          <md:ServiceName xml:lang="it">set2</md:ServiceName>
+          <md:RequestedAttribute Name="spidCode"/>
+          <md:RequestedAttribute Name="fiscalNumber"/>
+        </md:AttributeConsumingService>
