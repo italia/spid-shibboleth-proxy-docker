@@ -1,82 +1,180 @@
 # SPID Auth Docker
 
-SPID Auth Docker is a service provider based on shibboleth that takes care of the SPID authentication process with the Identity Provider and redirects the attributes of the final response to the set address so that they can be used by the application.
+SPID Auth Docker is a service provider based on shibboleth that takes care of
+the SPID authentication process with the Identity Provider and redirects the
+attributes of the final response to the set address so that they can be used
+by the application.
 
-SPID Auth Docker has been developed and is maintained by AgID - Agenzia per l'Italia Digitale.
+SPID Auth Docker has been developed and is maintained by AgID - Agenzia per
+l'Italia Digitale.
 
-## HowTo
+## How to quickly test it
 
-1.  Build the image
+1.  Create a directory to store SAML certificates and another to store log
+    files
 
-        $ make build
+        $ mkdir -vp /tmp/certs /tmp/log/{httpd,shibboleth,shibboleth-www}
 
-        or
+2.  Create a docker compose file (`docker-compose.yml`) with the following
+    content. **Note:** set `SERVER_NAME` to a publicly reachable IP or FQDN.
 
-        $ docker build --tag spid-auth-proxy .
+        version: '3'
 
-2.  Create a file (e.g. `myacs.xml`) with the following content
+        services:
+          authproxy:
+            image: spid-auth-proxy
+            build:
+              context: .
+              dockerfile: Dockerfile
+            ports:
+              - '80:80'
+              - '443:443'
+            volumes:
+              - '/tmp/certs:/opt/shibboleth-sp/certs'
+              - '/tmp/log:/var/log'
+            environment:
+              SERVER_NAME: 'my.auth.proxy.com'
+              ENTITY_ID: 'https://my.auth.proxy.com'
+              TARGET_BACKEND: 'https://mytargetapp.my.cloud.provider.com'
+              TARGET_LOCATION: '/login'
+              SPID_ACS: |
+                <md:AttributeConsumingService index="1">
+                  <md:ServiceName xml:lang="it">set1</md:ServiceName>
+                  <md:RequestedAttribute Name="name"/>
+                  <md:RequestedAttribute Name="familyName"/>
+                  <md:RequestedAttribute Name="fiscalNumber"/>
+                  <md:RequestedAttribute Name="email"/>
+                </md:AttributeConsumingService>
+                <md:AttributeConsumingService index="2">
+                  <md:ServiceName xml:lang="it">set2</md:ServiceName>
+                  <md:RequestedAttribute Name="spidCode"/>
+                  <md:RequestedAttribute Name="fiscalNumber"/>
+                </md:AttributeConsumingService>
 
-    ```xml
-    <md:AttributeConsumingService index="1">
-        <md:ServiceName xml:lang="it">my_service</md:ServiceName>
-        <md:RequestedAttribute Name="name"/>
-        <md:RequestedAttribute Name="familyName"/>
-        <md:RequestedAttribute Name="fiscalNumber"/>
-        <md:RequestedAttribute Name="email"/>
-    </md:AttributeConsumingService>
-    ```
+    You can use `docker-compose.quickstart.yml`, which is available in this
+    repository.
 
-3.  Create an environment file (e.g. `environment.env`) like the following
+3.  Execute the Docker environmnet with the following command
 
-        SERVER_NAME=<REACHABLE IP OR FQDN>
-        ENTITY_ID=https://my.auth.proxy.com
-        TARGET_BACKEND=https://mytargetapp.my.cloud.provider.com
-        TARGET_LOCATION=/login
+        $ docker-compose up --build
 
-4.  Create a directory (e.g. `certs`) to store SAML/TLS certificatestls. The
-    repository already provides this directory just of testing. Feel free to
-    customise it according to your environment
+    It will
 
-        $ mkdir -vp certs/{tls,saml}
+    *   build the docker image
 
-    then create (or upload) your TLS certificate
+    *   generate a self-signed certificate for TLS (`SERVER_NAME` used
+        as `CN`), SAML assertions signature (`SAML Signature` as `CN`) and
+        SAML metadata signature (`SAML Metadata Signature` as `CN`)
 
-        $ cd certs/tls
-        $ make
+    *   generate the Shibboleth/Httpd configuration according to the
+        environment variables
 
-5.  Run the container as follows (remember to check the mounted paths)
+    *   execure `shibd` and `httpd`
 
-        $ make run
+4.  If everything gone well, you should be able to access the URL
 
-        or
+        https://<SERVER_NAME>/metadata
 
-        $ docker run -ti --rm \
-            -p 80:80 -p 443:443 \
-            -e SPID_ACS="`cat myacs.xml`" \
-            --env-file environment.env \
-            -v "$(pwd)/certs/saml:/opt/shibboleth-sp/certs" \
-            -v "$(pwd)/certs/tls/server.crt:/etc/pki/tls/certs/server.crt:ro" \
-            -v "$(pwd)/certs/tls/server.key:/etc/pki/tls/private/server.key:ro" \
-            -v "$(pwd)/log:/var/log" \
-            spid-auth-proxy
+    Open it and use the following information
 
-6.  Open your browser (or `curl`) and check if the metadata were generated
+    *   `entityID` under `<md:EntityDescriptor>` tag
+    *   `<ds:X509Certificate>` under `<md:SPSSODescriptor>` tag
+    *   `Location` under `<md:SingleLogoutService>` tag
+    *   `Location` under `<md:AssertionConsumerService>` tag
+    *   attributes names under `<md:AttributeConsumingService>` tags
 
-        $ curl -L -k https://11.22.33.44/metadata
+    to register you authentication proxy on
 
-    If you like pretty printing
+        https://idp.spid.gov.it:8080
 
-        $ curl -L -k https://11.22.33.44/metadata | xmllint --format -
-
-7.  Before going ahead, you need to register your authentication proxy as
-    service provider. Go to https://idp.spid.gov.it:8080 and register your
-    proxy by reading the information from the metadata. If you do not change
-    the value of `ENTITY_ID` and `SERVER_NAME` as well as the certificates,
-    this step has to be executed just the first time.
-
-8.  Open in your browser
+5.  Open the URL
 
         https://<SERVER_NAME>/access
 
-    and start the authentication process with `lucia` and `password123`
-    as username and password by using one of the two links.
+    and click on
+
+       Test on /whoami (lucia/password123)
+
+    It starts an authentication process that will end on `/whoami` endpoint
+    where all the information about the authentication will be dumped.
+
+## How to use it in production-like environment
+
+1.  Create a directory to store SAML certificates and another to store log
+    files
+
+        $ mkdir -vp \
+            /opt/authproxy/certs/{saml,tls} \
+            /opt/authproxy/log/{httpd,shibboleth,shibboleth-www}
+
+2.  Create/Obtain X509 certificates for TLS and SAML signatures and store them
+    as follows
+
+        /opt/authproxy/certs
+        ├── saml
+        │   ├── sp-cert.pem
+        │   ├── sp-key.pem
+        │   ├── sp-meta-cert.pem
+        │   └── sp-meta-key.pem
+        └── tls
+            ├── server.crt
+            └── server.key
+
+3.  Create a docker compose file as follows. Be sure to set environment
+    variables to values reflecting your real environment.
+
+        version: '3'
+
+        services:
+          authproxy:
+            image: spid-auth-proxy
+            build:
+              context: .
+              dockerfile: Dockerfile
+            ports:
+              - '80:80'
+              - '443:443'
+            volumes:
+              - '/opt/authproxy/certs/saml:/opt/shibboleth-sp/certs:ro'
+              - '/opt/authproxy/certs/tls/server.crt:/etc/pki/tls/certs/server.crt:ro'
+              - '/opt/authproxy/certs/tls/server.key:/etc/pki/tls/private/server.key:ro'
+              - '/opt/authproxy/log:/var/log'
+            environment:
+              SERVER_NAME: 'my.auth.proxy.com'
+              ENTITY_ID: 'https://my.auth.proxy.com'
+              TARGET_BACKEND: 'https://mytargetapp.my.cloud.provider.com'
+              TARGET_LOCATION: '/login'
+              SPID_ACS: |
+                <md:AttributeConsumingService index="1">
+                  <md:ServiceName xml:lang="it">set1</md:ServiceName>
+                  <md:RequestedAttribute Name="name"/>
+                  <md:RequestedAttribute Name="familyName"/>
+                  <md:RequestedAttribute Name="fiscalNumber"/>
+                  <md:RequestedAttribute Name="email"/>
+                </md:AttributeConsumingService>
+                <md:AttributeConsumingService index="2">
+                  <md:ServiceName xml:lang="it">set2</md:ServiceName>
+                  <md:RequestedAttribute Name="spidCode"/>
+                  <md:RequestedAttribute Name="fiscalNumber"/>
+                </md:AttributeConsumingService>
+
+4.  If necessary, revise the `httpd` configuration files under `etc/httpd/conf.d`
+    in order to fit with your requirements
+
+5.  Execute the Docker environmnet with the following command
+
+        $ docker-compose up --build
+
+6.  Register your authentication proxy on the IdP by providing the information
+    contained at
+
+        https://<SERVER_NAME>/metadata
+
+7.  In order to use the authentication proxy, you application should
+    initialise the the authentication by calling
+
+        https://<SERVER_NAME>/iam/Login?target=https://<SERVER_NAME>/login&entityID=<IDP ENTITY_ID>
+
+    Once authenticated, the callback (`/login`) will proxy the response to
+    your backend (`TARGET_BACKEND`) by including within the request headers
+    the authentication result.

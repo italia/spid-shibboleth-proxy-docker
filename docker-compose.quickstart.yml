@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  authproxy:
+    image: spid-auth-proxy
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - '/tmp/certs:/opt/shibboleth-sp/certs'
+      - '/tmp/log:/var/log'
+    environment:
+      SERVER_NAME: 'my.auth.proxy.com'
+      ENTITY_ID: 'https://my.auth.proxy.com'
+      TARGET_BACKEND: 'https://mytargetapp.my.cloud.provider.com'
+      TARGET_LOCATION: '/login'
+      SPID_ACS: |
+        <md:AttributeConsumingService index="1">
+          <md:ServiceName xml:lang="it">set1</md:ServiceName>
+          <md:RequestedAttribute Name="name"/>
+          <md:RequestedAttribute Name="familyName"/>
+          <md:RequestedAttribute Name="fiscalNumber"/>
+          <md:RequestedAttribute Name="email"/>
+        </md:AttributeConsumingService>
+        <md:AttributeConsumingService index="2">
+          <md:ServiceName xml:lang="it">set2</md:ServiceName>
+          <md:RequestedAttribute Name="spidCode"/>
+          <md:RequestedAttribute Name="fiscalNumber"/>
+        </md:AttributeConsumingService>
