@@ -1,4 +1,10 @@
-# spid-auth-proxy
+# SPID Auth Docker
+
+SPID Auth Docker is a service provider based on shibboleth that takes care of the SPID authentication process with the Identity Provider and redirects the attributes of the final response to the set address so that they can be used by the application.
+
+SPID Auth Docker has been developed and is maintained by AgID - Agenzia per l'Italia Digitale.
+
+## HowTo
 
 1.  Build the image
 
