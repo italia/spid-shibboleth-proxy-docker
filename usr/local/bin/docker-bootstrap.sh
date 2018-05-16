@@ -26,6 +26,7 @@ export LD_LIBRARY_PATH=/opt/shibboleth/lib64:${LD_LIBRARY_PATH}
 _ENTITY_ID=${ENTITY_ID:-"https://auth.example.com/sp"}
 _SPID_ACS=${SPID_ACS:-""}
 _SERVER_NAME=${SERVER_NAME:-"www.to.be.set.it"}
+_ERROR_URL=${ERROR_URL:-"https://${_SERVER_NAME}/error"}
 _TARGET_BACKEND=${TARGET_BACKEND:-"https://backend.to.be.set.it"}
 _TARGET_LOCATION=${TARGET_LOCATION:-"/login"}
 
@@ -143,6 +144,7 @@ popd
 pushd /etc/shibboleth
 sed \
     -e "s|%ENTITY_ID%|${_ENTITY_ID}|g" \
+    -e "s|%ERROR_URL%|${_ERROR_URL}|g" \
     shibboleth2.xml.tpl > shibboleth2.xml
 popd
 

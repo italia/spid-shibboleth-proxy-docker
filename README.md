@@ -141,6 +141,7 @@ l'Italia Digitale.
               - '/opt/authproxy/log:/var/log'
             environment:
               SERVER_NAME: 'my.auth.proxy.com'
+              ERROR_URL: 'https://my.auth.proxy.com/error'
               ENTITY_ID: 'https://my.auth.proxy.com'
               TARGET_BACKEND: 'https://mytargetapp.my.cloud.provider.com'
               TARGET_LOCATION: '/login'
@@ -157,6 +158,11 @@ l'Italia Digitale.
                   <md:RequestedAttribute Name="spidCode"/>
                   <md:RequestedAttribute Name="fiscalNumber"/>
                 </md:AttributeConsumingService>
+
+    The URL specified in `ERROR_URL` should be an endpoint that is able
+    to manage errors as mentioned in
+
+        https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPErrors#NativeSPErrors-Redirection)
 
 4.  If necessary, revise the `httpd` configuration files under `etc/httpd/conf.d`
     in order to fit with your requirements
