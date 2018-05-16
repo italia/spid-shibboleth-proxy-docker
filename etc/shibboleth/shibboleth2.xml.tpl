@@ -56,11 +56,8 @@
         </Sessions>
 
         <!-- Error page settings -->
-        <Errors supportContact="help@example.com"
-            helpLocation="about.html"
-            session="loginError.html"
-            ssl="genericError.html"
-            metadata="genericError.html"/>
+        <Errors supportContact="spid.tech@agid.gov.it"
+            redirectErrors="%ERROR_URL%" />
 
         <MetadataProvider type="XML"
             validate="true"
