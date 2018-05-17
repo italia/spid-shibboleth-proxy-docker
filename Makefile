@@ -1,9 +1,11 @@
 SPID_ACS=$(shell cat myacs.xml | sed -e "s/^\s*//g" -e "s/$$\s*//g" | tr -d "\n")
+VERSION=$(shell cat VERSION)
 
 default: build
 
 build:
-	docker build --tag spid-auth-proxy .
+	docker build --tag spid-auth-proxy:$(VERSION) . && \
+	docker build --tag spid-auth-proxy:latest .
 
 run: build
 	docker run -ti --rm \
