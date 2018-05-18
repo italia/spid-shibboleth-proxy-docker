@@ -18,38 +18,40 @@ l'Italia Digitale.
 2.  Create a docker compose file (`docker-compose.yml`) with the following
     content. **Note:** set `SERVER_NAME` to a publicly reachable IP or FQDN.
 
-        version: '3'
+    ```.yaml
+    version: '3'
 
-        services:
-          authproxy:
-            image: spid-auth-proxy
-            build:
-              context: .
-              dockerfile: Dockerfile
-            ports:
-              - '80:80'
-              - '443:443'
-            volumes:
-              - '/tmp/certs:/opt/shibboleth-sp/certs'
-              - '/tmp/log:/var/log'
-            environment:
-              SERVER_NAME: 'my.auth.proxy.com'
-              ENTITY_ID: 'https://my.auth.proxy.com'
-              TARGET_BACKEND: 'https://mytargetapp.my.cloud.provider.com'
-              TARGET_LOCATION: '/login'
-              SPID_ACS: |
-                <md:AttributeConsumingService index="1">
-                  <md:ServiceName xml:lang="it">set1</md:ServiceName>
-                  <md:RequestedAttribute Name="name"/>
-                  <md:RequestedAttribute Name="familyName"/>
-                  <md:RequestedAttribute Name="fiscalNumber"/>
-                  <md:RequestedAttribute Name="email"/>
-                </md:AttributeConsumingService>
-                <md:AttributeConsumingService index="2">
-                  <md:ServiceName xml:lang="it">set2</md:ServiceName>
-                  <md:RequestedAttribute Name="spidCode"/>
-                  <md:RequestedAttribute Name="fiscalNumber"/>
-                </md:AttributeConsumingService>
+    services:
+      authproxy:
+        image: spid-auth-proxy
+        build:
+          context: .
+          dockerfile: Dockerfile
+        ports:
+          - '80:80'
+          - '443:443'
+        volumes:
+          - '/tmp/certs:/opt/shibboleth-sp/certs'
+          - '/tmp/log:/var/log'
+        environment:
+          SERVER_NAME: 'my.auth.proxy.com'
+          ENTITY_ID: 'https://my.auth.proxy.com'
+          TARGET_BACKEND: 'https://mytargetapp.my.cloud.provider.com'
+          TARGET_LOCATION: '/login'
+          SPID_ACS: |
+            <md:AttributeConsumingService index="1">
+              <md:ServiceName xml:lang="it">set1</md:ServiceName>
+              <md:RequestedAttribute Name="name"/>
+              <md:RequestedAttribute Name="familyName"/>
+              <md:RequestedAttribute Name="fiscalNumber"/>
+              <md:RequestedAttribute Name="email"/>
+            </md:AttributeConsumingService>
+            <md:AttributeConsumingService index="2">
+              <md:ServiceName xml:lang="it">set2</md:ServiceName>
+              <md:RequestedAttribute Name="spidCode"/>
+              <md:RequestedAttribute Name="fiscalNumber"/>
+            </md:AttributeConsumingService>
+    ```
 
     You can use `docker-compose.quickstart.yml`, which is available in this
     repository.
@@ -123,46 +125,48 @@ l'Italia Digitale.
 3.  Create a docker compose file as follows. Be sure to set environment
     variables to values reflecting your real environment.
 
-        version: '3'
+    ```.yaml
+    version: '3'
 
-        services:
-          authproxy:
-            image: spid-auth-proxy
-            build:
-              context: .
-              dockerfile: Dockerfile
-            ports:
-              - '80:80'
-              - '443:443'
-            volumes:
-              - '/opt/authproxy/certs/saml:/opt/shibboleth-sp/certs:ro'
-              - '/opt/authproxy/certs/tls/server.crt:/etc/pki/tls/certs/server.crt:ro'
-              - '/opt/authproxy/certs/tls/server.key:/etc/pki/tls/private/server.key:ro'
-              - '/opt/authproxy/log:/var/log'
-            environment:
-              SERVER_NAME: 'my.auth.proxy.com'
-              ERROR_URL: 'https://my.auth.proxy.com/error'
-              ENTITY_ID: 'https://my.auth.proxy.com'
-              TARGET_BACKEND: 'https://mytargetapp.my.cloud.provider.com'
-              TARGET_LOCATION: '/login'
-              SPID_ACS: |
-                <md:AttributeConsumingService index="1">
-                  <md:ServiceName xml:lang="it">set1</md:ServiceName>
-                  <md:RequestedAttribute Name="name"/>
-                  <md:RequestedAttribute Name="familyName"/>
-                  <md:RequestedAttribute Name="fiscalNumber"/>
-                  <md:RequestedAttribute Name="email"/>
-                </md:AttributeConsumingService>
-                <md:AttributeConsumingService index="2">
-                  <md:ServiceName xml:lang="it">set2</md:ServiceName>
-                  <md:RequestedAttribute Name="spidCode"/>
-                  <md:RequestedAttribute Name="fiscalNumber"/>
-                </md:AttributeConsumingService>
+    services:
+      authproxy:
+        image: spid-auth-proxy
+        build:
+          context: .
+          dockerfile: Dockerfile
+        ports:
+          - '80:80'
+          - '443:443'
+        volumes:
+          - '/opt/authproxy/certs/saml:/opt/shibboleth-sp/certs:ro'
+          - '/opt/authproxy/certs/tls/server.crt:/etc/pki/tls/certs/server.crt:ro'
+          - '/opt/authproxy/certs/tls/server.key:/etc/pki/tls/private/server.key:ro'
+          - '/opt/authproxy/log:/var/log'
+        environment:
+          SERVER_NAME: 'my.auth.proxy.com'
+          ERROR_URL: 'https://my.auth.proxy.com/error'
+          ENTITY_ID: 'https://my.auth.proxy.com'
+          TARGET_BACKEND: 'https://mytargetapp.my.cloud.provider.com'
+          TARGET_LOCATION: '/login'
+          SPID_ACS: |
+            <md:AttributeConsumingService index="1">
+              <md:ServiceName xml:lang="it">set1</md:ServiceName>
+              <md:RequestedAttribute Name="name"/>
+              <md:RequestedAttribute Name="familyName"/>
+              <md:RequestedAttribute Name="fiscalNumber"/>
+              <md:RequestedAttribute Name="email"/>
+            </md:AttributeConsumingService>
+            <md:AttributeConsumingService index="2">
+              <md:ServiceName xml:lang="it">set2</md:ServiceName>
+              <md:RequestedAttribute Name="spidCode"/>
+              <md:RequestedAttribute Name="fiscalNumber"/>
+            </md:AttributeConsumingService>
+    ```
 
     The URL specified in `ERROR_URL` should be an endpoint that is able
     to manage errors as mentioned in
 
-        https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPErrors#NativeSPErrors-Redirection)
+        https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPErrors#NativeSPErrors-Redirection
 
 4.  If necessary, revise the `httpd` configuration files under `etc/httpd/conf.d`
     in order to fit with your requirements
