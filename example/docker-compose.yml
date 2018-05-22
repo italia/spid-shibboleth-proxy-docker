@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  backend_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SERVER_NAME: '192.168.1.1'
+  auth_proxy:
+    image: spid-auth-proxy
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+      - '443:443'
+    environment:
+      SERVER_NAME: '192.168.1.1'
+      ENTITY_ID: 'http://192.168.1.1'
+      TARGET_BACKEND: 'http://backend_app:8080'
+      TARGET_LOCATION: '/login'
+      SPID_ACS: |
+        <md:AttributeConsumingService index="1">
+          <md:ServiceName xml:lang="it">set1</md:ServiceName>
+          <md:RequestedAttribute Name="fiscalNumber"/>
+          <md:RequestedAttribute Name="name"/>
+        </md:AttributeConsumingService>
+    depends_on:
+      - backend_app
