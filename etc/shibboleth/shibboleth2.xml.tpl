@@ -61,7 +61,7 @@
 
         <MetadataProvider type="XML"
             validate="true"
-            uri="https://auth.agid.gov.it/spid-entities-idps.xml"
+            uri="https://registry.spid.gov.it/metadata/idp/spid-entities-idps.xml"
             backingFilePath="spid-entities-idps.xml"
             reloadInterval="3600" />
 
