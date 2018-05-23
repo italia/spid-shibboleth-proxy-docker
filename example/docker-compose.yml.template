@@ -18,7 +18,7 @@ services:
     environment:
       SERVER_NAME: '${SERVER_NAME}'
       ENTITY_ID: 'https://${SERVER_NAME}'
-      TARGET_BACKEND: 'https://backend_app:8080'
+      TARGET_BACKEND: 'http://backend_app:8080'
       TARGET_LOCATION: '/login'
       SPID_ACS: |
         <md:AttributeConsumingService index="0">
