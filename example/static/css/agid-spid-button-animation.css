@@ -1,0 +1,245 @@
+	@import url('http://fonts.googleapis.com/css?family=Titillium+Web:200');
+	
+	body {
+		margin:0;
+		padding:0;
+	}
+	
+	.agid-spid-button-anim-anim-in { 
+		animation-name: anim-panel-in; 
+		animation-duration: 0s; 
+		animation-delay: 0s; 
+		animation-timing-function: cubic-bezier(0.230, 1.000, 0.320, 1.000); 
+		animation-iteration-count: 1;
+		animation-direction: normal; 
+		animation-fill-mode: forwards; 
+	}
+	.agid-spid-button-anim-base-anim-in { 
+		animation-name: anim-base-in; 
+		animation-duration: 2s; 
+		animation-delay: 0s; 
+		animation-timing-function: cubic-bezier(0.230, 1.000, 0.320, 1.000); 
+		animation-iteration-count: 1;
+		animation-direction: normal; 
+		animation-fill-mode: forwards; 
+	}
+	.agid-spid-button-anim-icon-anim-in { 
+		animation-name: anim-icon-in; 
+		animation-duration: 1s; 
+		animation-delay: 0s; 
+		animation-timing-function: cubic-bezier(0.230, 1.000, 0.320, 1.000); 
+		animation-iteration-count: 1;
+		animation-direction: normal; 
+		animation-fill-mode: forwards; 
+	}
+	.agid-spid-panel-select-anim-in { 
+		animation-name: anim-panel-in; 
+		animation-duration: 3s; 
+		animation-delay: 0s; 
+		animation-timing-function: cubic-bezier(0.230, 1.000, 0.320, 1.000); 
+		animation-iteration-count: 1;
+		animation-direction: normal; 
+		animation-fill-mode: forwards; 
+	}
+	.agid-spid-button-anim-anim-out { 
+		animation-name: anim-panel-out; 
+		animation-duration: 2s; 
+		animation-delay: 0s; 
+		animation-timing-function: cubic-bezier(0.230, 1.000, 0.320, 1.000); 
+		animation-iteration-count: 1;
+		animation-direction: normal; 
+		animation-fill-mode: forwards; 
+	}		
+	.agid-spid-button-anim-base-anim-out { 
+		animation-name: anim-base-out; 
+		animation-duration: 0.5s; 
+		animation-delay: 0s; 
+		animation-timing-function: cubic-bezier(0.230, 1.000, 0.320, 1.000); 
+		animation-iteration-count: 1;
+		animation-direction: normal; 
+		animation-fill-mode: forwards; 
+	}
+	.agid-spid-button-anim-icon-anim-out { 
+		animation-name: anim-icon-out; 
+		animation-duration: 1s; 
+		animation-delay: 0s; 
+		animation-timing-function: cubic-bezier(0.230, 1.000, 0.320, 1.000); 
+		animation-iteration-count: 1;
+		animation-direction: normal; 
+		animation-fill-mode: forwards; 
+	}
+	.agid-spid-panel-select-anim-out { 
+		animation-name: anim-panel-out; 
+		animation-duration: 3s; 
+		animation-delay: 0s; 
+		animation-timing-function: cubic-bezier(0.230, 1.000, 0.320, 1.000); 
+		animation-iteration-count: 1;
+		animation-direction: normal; 
+		animation-fill-mode: forwards; 
+	}
+	
+	@keyframes anim-base-in {
+		0% {
+			width: 180px;
+			height: 48px;		
+			position:absolute;
+			top: calc((100vh - 48px) / 2);
+			left: calc((100vw - 180px) / 2);		
+			border-radius:100%;	
+			opacity:0;
+		}	
+		50% {
+			width: 180px;
+			height: 48px;		
+			position:absolute;
+			top: calc((100vh - 48px) / 2);
+			left: calc((100vw - 180px) / 2);		
+			border-radius:100%;		
+			opacity:1;
+		}
+		100% {
+			position:absolute;
+			top: calc((100vh - 48px) / 2);
+			left: calc((100vw - 180px) / 2);
+			transform: scale(30);
+			border-radius:100%;		
+			opacity:1;
+		}					
+	}	
+	
+	@keyframes anim-base-out {
+		0% {
+			position:absolute;
+			top: calc((100vh - 48px) / 2);
+			left: calc((100vw - 180px) / 2);
+			transform: scale(30);
+			border-radius:100%;		
+			opacity:1;
+		}	
+		50% {
+			width: 180px;
+			height: 48px;		
+			position:absolute;
+			top: calc((100vh - 48px) / 2);
+			left: calc((100vw - 180px) / 2);		
+			border-radius:100%;		
+			opacity:0.5;
+		}	
+		100% {
+			width: 180px;
+			height: 48px;		
+			position:absolute;
+			top: calc((100vh - 48px) / 2);
+			left: calc((100vw - 180px) / 2);		
+			border-radius:100%;	
+			opacity:0;
+		}	
+	}		
+	
+	@keyframes anim-icon-in {
+		0% {
+			width: 30px;
+			height: 30px;		
+			position:absolute;
+			top: 50vh;
+			left: 50vw;
+			opacity:0;		
+		}
+		5% {
+			width: 30px;
+			height: 30px;		
+			position:absolute;
+			top: 50vh;
+			left: 50vw;
+			opacity:0.2;		
+		}		
+		100% {
+			position:absolute;
+			top: 0vh;
+			left: 20vw;		
+			width: 120vw;
+			height: 120vh;
+			opacity: 0.1;
+		}		
+	}		
+	
+	@keyframes anim-icon-out {
+		0% {
+			position:absolute;
+			top: 0vh;
+			left: 20vw;		
+			width: 120vw;
+			height: 120vh;
+			opacity: 0.1;
+		}		
+		50% {
+			width: 30px;
+			height: 30px;		
+			position:absolute;
+			top: 50vh;
+			left: 50vw;
+			opacity:0;		
+		}		
+		100% {
+			width: 30px;
+			height: 30px;		
+			position:absolute;
+			top: 50vh;
+			left: 50vw;
+			opacity:0;		
+		}
+	}	
+	
+	@keyframes anim-panel-in {
+		0% { 
+			opacity: 0; 
+		}		
+		15% { 
+			opacity: 0; 
+		}			
+		100% { 	
+			opacity: 1; 
+		}	
+	}	
+	
+	@keyframes anim-panel-out {
+		0% { 	
+			opacity: 1; 
+		}	
+		100% { 
+			position:absolute;
+			left:-200vw;
+			opacity: 0; 
+		}		
+	}		
+	
+	.agid-spid-visibile { 
+		display:block!important; 
+		opacity:0;
+	}
+	
+	#agid-spid-button-anim {
+		display:none;
+		position:relative;
+		width: 100vw;
+		height: 100vh;
+		overflow:hidden;
+	}
+	
+	#agid-spid-button-anim-base {	
+		display:none;
+		width: 180px;
+		height: 48px;
+		background-color: #075fc5;
+		border-radius:4px;
+	}
+	
+	#agid-spid-button-anim-icon {
+		display:none;
+		width: 30px;
+		height: 30px;
+		background: #fff;
+		border-radius: 50%;
+		background:url("../img/spid-ico-circle-bb.svg") center center no-repeat;
+	}	
+	

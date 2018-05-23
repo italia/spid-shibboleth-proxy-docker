@@ -1,0 +1,57 @@
+﻿@import url(https://fonts.googleapis.com/css?family=Titillium+Web:400,600,700,900);
+.agid-spid-panel {position:relative;top:0;left:0;width:100%;height:100%;color:#000;position:fixed!important;z-index:1;overflow:auto;display:none; background:#06c;}
+.agid-spid-enter {display: inline-block;padding: 0;color: #FFF;background-color: #06C;font-family: "Titillium Web", HelveticaNeue, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-weight: 600;line-height: 1em;text-decoration: none;border: 0;text-align: center;cursor: pointer;outline:0;}
+.agid-spid-enter svg {fill: #FFF}
+.agid-spid-enter:hover, .agid-spid-enter:focus  {background-color: #036;color: #FFF}
+.agid-spid-enter:active{background-color: #83BEED;color: #036;}
+.agid-spid-enter:visited {background-color: #06C;color: #FFF}
+.agid-spid-enter-icon,.agid-spid-enter-text {display: block;float: left}
+.agid-spid-enter-icon {margin: 0 -.4em 0 0;padding: .6em .8em .5em;border-right: rgba(255, 255, 255, 0.1) .1em solid}
+.agid-spid-enter-text {padding: .95em 1em .85em;font-size: 1.15em;text-align: center;}
+.agid-spid-enter-icon svg {width: 1.8em;height: 1.8em; fill: #fff;}
+.agid-spid-enter-size-s {font-size: .625em; -moz-border-radius: 5px;-webkit-border-radius: 5px;-khtml-border-radius: 5px;border-radius: 5px;}
+.agid-spid-enter-size-s > span img {width: 19px;height: 19px;border: 0}
+.agid-spid-enter-size-m {font-size: .95em; -moz-border-radius: 6px;-webkit-border-radius: 6px;-khtml-border-radius: 6px;border-radius: 6px;}
+.agid-spid-enter-size-m > span img {width: 29px;height: 29px;border: 0;}
+.agid-spid-enter-size-l {font-size: 1.25em; -moz-border-radius: 7px;-webkit-border-radius: 7px;-khtml-border-radius: 7px;border-radius: 7px;}
+.agid-spid-enter-size-l > span img {width: 38px;height: 38px;border: 0;}
+.agid-spid-enter-size-xl {font-size: 1.55em; -moz-border-radius: 8px;-webkit-border-radius: 8px;-khtml-border-radius: 8px;border-radius: 8px;}
+.agid-spid-enter-size-xl > span img {width: 47px;height: 47px;border: 0}
+#agid-spid-enter-title-container {padding-top: 1.250em;}
+
+
+#agid-spid-panel-header {
+    display:block;
+    position:fixed;
+    width:100%;
+    overflow:hidden;
+    text-align:center;
+    padding:5px 0;
+    /*margin:0;*/
+    color:#fff;
+    background-color:#fff;
+    z-index:1;
+    -webkit-backface-visibility: hidden;
+    height: 20px;
+}
+#agid-spid-panel-header .agid-spid-panel-back, #agid-spid-panel-header .agid-spid-panel-logo {float:left;width:33.33333%;  padding-top:3px;}
+#agid-spid-panel-header .agid-spid-panel-back a, #agid-spid-panel-header .agid-spid-panel-back button, #agid-spid-panel-header .agid-spid-panel-back button a {padding:12px 16px 8px;float:left;width:auto;border:none;outline:none;display:block;cursor:pointer}
+#agid-spid-panel-header .agid-spid-panel-back a:hover, #agid-spid-panel-header .agid-spid-panel-back a:focus {background-color: #036;}
+#agid-spid-panel-header .agid-spid-panel-back img {max-height:30px;}
+#agid-spid-panel-header .agid-spid-panel-logo img {max-height:20px;}
+
+.agid-spid-panel-content-center {max-width:650px; text-align:center;margin:auto;}
+#agid-spid-panel-content h1#agid-spid-enter-title-page { font-size: 1em; margin: 0 auto;}  
+
+.agid-spid-col.xs12{width:49.99999%} 
+.agid-spid-panel{background-position: bottom -25px right -150px;}
+
+
+
+@media (max-width:360px) {
+    #agid-spid-enter-support-actions {display:none;}
+    #agid-spid-panel-back div a img {display:none;}
+}
+@media (max-width:768px) {
+    
+}
