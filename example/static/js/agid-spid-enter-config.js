@@ -24,19 +24,19 @@ var config = {
         "title": "Accedi a SPID con Tim",
         "logo": "spid-idp-timid.svg"
     },
-    "newidp1": {
+    "intesa": {
         "url": "/login",
         "title": "Fornitore non attivo",
-        "logo": "spid-idp-dummy.svg"
+        "logo": "spid-idp-intesaid.svg"
     },
-    "newidp2": {
+    "register": {
         "url": "/login",
         "title": "Fornitore non attivo",
-        "logo": "spid-idp-dummy.svg"
+        "logo": "spid-idp-spiditalia.svg"
     },
-    "newidp3": {
+    "namirial": {
         "url": "/login",
         "title": "Fornitore non attivo",
-        "logo": "spid-idp-dummy.svg"
+        "logo": "spid-idp-namirialid.svg"
     }
 };
