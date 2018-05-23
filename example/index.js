@@ -15,12 +15,15 @@
 // Licence for the specific language governing permissions and limitations
 // under the Licence.
 const express = require('express');
+const path = require('path');
 const session = require('express-session');
 
 const PORT = 8080;
 const SERVER_NAME = process.env.SERVER_NAME || 'localhost';
 
 const app = express();
+
+app.use(express.static('static'));
 
 app.use(session({
   secret: 's3cr3t',
@@ -39,9 +42,7 @@ app.get('/', (req, res) => {
       + `<a href="https://${SERVER_NAME}/iam/Logout`
       + '?return=/logout">Logout</a>');
   } else {
-    res.send(`<a href="https://${SERVER_NAME}/iam/Login`
-      + `?target=https://${SERVER_NAME}/login`
-      + '&entityID=https://idp.spid.gov.it">Login</a>');
+    res.sendFile(path.join(__dirname + '/static/pages/smart-button.html'));
   }
 });
 
@@ -53,7 +54,7 @@ app.get('/login', (req, res) => {
   const name = req.get('NAME');
 
   if (fiscalNumber && name) {
-    console.log('Got login headers (${fiscalNumber}, ${name}');
+    console.log(`Got login headers (${fiscalNumber}, ${name})`);
     req.session.fiscalNumber = fiscalNumber;
     req.session.name = name;
     res.redirect('/');
@@ -76,7 +77,7 @@ app.get('/logout', (req, res) => {
  * Free access resource
  */
 app.get('/other', (req, res) => {
-  res.send('Other');
+  res.sendFile(path.join(__dirname + '/static/pages/other.html'));
 });
 
 /**
