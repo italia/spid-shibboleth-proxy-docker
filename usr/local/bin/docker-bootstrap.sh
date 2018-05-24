@@ -138,7 +138,7 @@ samlsign \
     -s -k ${SAML_META_KEY} -c ${SAML_META_CERT} -f ${TMP_METADATA_3} \
     -alg http://www.w3.org/2001/04/xmldsig-more#rsa-sha256 \
     -dig http://www.w3.org/2001/04/xmlenc#sha256 \
-    > metadata.xml
+    | xmllint --format - > metadata.xml
 popd
 
 #
