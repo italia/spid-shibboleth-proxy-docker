@@ -21,8 +21,8 @@
 
     <xsl:template match="@*|md:SPSSODescriptor">
         <xsl:copy>
-            <xsl:attribute name="AuthnRequestSigned">true</xsl:attribute>
-            <xsl:attribute name="WantAssertionSigned">true</xsl:attribute>
+            <xsl:attribute name="AuthnRequestsSigned">true</xsl:attribute>
+            <xsl:attribute name="WantAssertionsSigned">true</xsl:attribute>
             <xsl:apply-templates select="@*|node()"/>
             %ACS%
         </xsl:copy>
