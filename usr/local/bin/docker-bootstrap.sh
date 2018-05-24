@@ -87,7 +87,7 @@ if [ ! -f ${SAML_CERT} ] && [ ! -f ${SAML_KEY} ]
 then
     ./keygen.sh -f \
         -e ${_ENTITY_ID} \
-        -h "SAML Signature" \
+        -h "${_ORGANIZATION} - SAML Signature" \
         -o ${SAML_CERT_DIR}
 fi
 
@@ -95,7 +95,7 @@ if [ ! -f ${SAML_META_CERT} ] && [ ! -f ${SAML_META_KEY} ]
 then
     ./keygen.sh -f \
         -e ${_ENTITY_ID} \
-        -h "SAML Metadata Signature" \
+        -h "${_ORGANIZATION} - SAML Metadata Signature" \
         -o ${SAML_CERT_DIR} \
         -n "sp-meta"
 fi
