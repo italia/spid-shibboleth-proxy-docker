@@ -29,6 +29,7 @@ _SERVER_NAME=${SERVER_NAME:-"www.to.be.set.it"}
 _ERROR_URL=${ERROR_URL:-"https://${_SERVER_NAME}/error"}
 _TARGET_BACKEND=${TARGET_BACKEND:-"https://backend.to.be.set.it"}
 _TARGET_LOCATION=${TARGET_LOCATION:-"/login"}
+_ORGANIZATION=${ORGANIZATION:-"A Company Making Everything (A.C.M.E)"}
 
 
 ##
@@ -117,6 +118,8 @@ pushd /etc/shibboleth
     -e ${_ENTITY_ID} \
     -L \
     -f urn:oasis:names:tc:SAML:2.0:nameid-format:transient \
+    -2 \
+    -o "${_ORGANIZATION}" \
     > ${TMP_METADATA_1}
 popd
 
