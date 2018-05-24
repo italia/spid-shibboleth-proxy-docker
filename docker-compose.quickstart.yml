@@ -13,6 +13,7 @@ services:
       - '/tmp/certs:/opt/shibboleth-sp/certs'
       - '/tmp/log:/var/log'
     environment:
+      ORGANIZATION: 'My eGov Service'
       SERVER_NAME: 'my.auth.proxy.com'
       ENTITY_ID: 'https://my.auth.proxy.com'
       TARGET_BACKEND: 'https://mytargetapp.my.cloud.provider.com'

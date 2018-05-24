@@ -34,6 +34,7 @@ l'Italia Digitale.
           - '/tmp/certs:/opt/shibboleth-sp/certs'
           - '/tmp/log:/var/log'
         environment:
+          ORGANIZATION: 'My eGov Service'
           SERVER_NAME: 'my.auth.proxy.com'
           ENTITY_ID: 'https://my.auth.proxy.com'
           TARGET_BACKEND: 'https://mytargetapp.my.cloud.provider.com'
@@ -143,6 +144,7 @@ l'Italia Digitale.
           - '/opt/authproxy/certs/tls/server.key:/etc/pki/tls/private/server.key:ro'
           - '/opt/authproxy/log:/var/log'
         environment:
+          ORGANIZATION: 'My eGov Service'
           SERVER_NAME: 'my.auth.proxy.com'
           ERROR_URL: 'https://my.auth.proxy.com/error'
           ENTITY_ID: 'https://my.auth.proxy.com'

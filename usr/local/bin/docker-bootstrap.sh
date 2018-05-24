@@ -29,6 +29,7 @@ _SERVER_NAME=${SERVER_NAME:-"www.to.be.set.it"}
 _ERROR_URL=${ERROR_URL:-"https://${_SERVER_NAME}/error"}
 _TARGET_BACKEND=${TARGET_BACKEND:-"https://backend.to.be.set.it"}
 _TARGET_LOCATION=${TARGET_LOCATION:-"/login"}
+_ORGANIZATION=${ORGANIZATION:-"A Company Making Everything (A.C.M.E)"}
 
 
 ##
@@ -86,7 +87,7 @@ if [ ! -f ${SAML_CERT} ] && [ ! -f ${SAML_KEY} ]
 then
     ./keygen.sh -f \
         -e ${_ENTITY_ID} \
-        -h "SAML Signature" \
+        -h "${_ORGANIZATION} - SAML Signature" \
         -o ${SAML_CERT_DIR}
 fi
 
@@ -94,7 +95,7 @@ if [ ! -f ${SAML_META_CERT} ] && [ ! -f ${SAML_META_KEY} ]
 then
     ./keygen.sh -f \
         -e ${_ENTITY_ID} \
-        -h "SAML Metadata Signature" \
+        -h "${_ORGANIZATION} - SAML Metadata Signature" \
         -o ${SAML_CERT_DIR} \
         -n "sp-meta"
 fi
@@ -117,6 +118,8 @@ pushd /etc/shibboleth
     -e ${_ENTITY_ID} \
     -L \
     -f urn:oasis:names:tc:SAML:2.0:nameid-format:transient \
+    -2 \
+    -o "${_ORGANIZATION}" \
     > ${TMP_METADATA_1}
 popd
 
@@ -135,7 +138,7 @@ samlsign \
     -s -k ${SAML_META_KEY} -c ${SAML_META_CERT} -f ${TMP_METADATA_3} \
     -alg http://www.w3.org/2001/04/xmldsig-more#rsa-sha256 \
     -dig http://www.w3.org/2001/04/xmlenc#sha256 \
-    > metadata.xml
+    | xmllint --format - > metadata.xml
 popd
 
 #
