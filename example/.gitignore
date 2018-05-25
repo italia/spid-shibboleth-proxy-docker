@@ -1,0 +1,5 @@
+docker-compose.yml
+node_modules
+*.log
+*_log
+*.pem
