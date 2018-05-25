@@ -7,6 +7,8 @@ services:
       dockerfile: Dockerfile
     environment:
       SERVER_NAME: '${SERVER_NAME}'
+#   networks:
+#     - example_net
   auth_proxy:
     image: spid-auth-proxy
     build:
@@ -15,6 +17,11 @@ services:
     ports:
       - '80:80'
       - '443:443'
+    volumes:
+      - './certs:/opt/shibboleth-sp/certs'
+      - './log/httpd:/var/log/httpd'
+      - './log/shibboleth:/var/log/shibboleth'
+      - './log/shibboleth-www:/var/log/shibboleth-www'
     environment:
       SERVER_NAME: '${SERVER_NAME}'
       ENTITY_ID: 'https://${SERVER_NAME}'
@@ -28,5 +35,16 @@ services:
         </md:AttributeConsumingService>
     depends_on:
       - backend_app
+#   networks:
+#     - example_net
+
+#
+# Enable networks if you're on OpenStack
+#
+
+#networks:
+#  example_net:
+#    driver_opts:
+#      com.docker.network.driver.mtu: 1400
 
 # vim: ft=yaml
