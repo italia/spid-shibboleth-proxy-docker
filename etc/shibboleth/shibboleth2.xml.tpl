@@ -63,7 +63,11 @@
             validate="true"
             uri="https://registry.spid.gov.it/metadata/idp/spid-entities-idps.xml"
             backingFilePath="spid-entities-idps.xml"
-            reloadInterval="3600" />
+            reloadInterval="3600">
+            <MetadataFilter
+                type="Signature"
+                certificate="/opt/shibboleth-sp/metadata/registry.pem"/>
+        </MetadataProvider>
 
         <MetadataProvider
             type="XML"

@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+* Add checking of the aggregate IdP metadata signature
+
 ## 0.2.0 (2018-05-24)
 
 * Declare only SAML 2.0 as supported protocol
