@@ -30,6 +30,7 @@ _ERROR_URL=${ERROR_URL:-"https://${_SERVER_NAME}/error"}
 _TARGET_BACKEND=${TARGET_BACKEND:-"https://backend.to.be.set.it"}
 _TARGET_LOCATION=${TARGET_LOCATION:-"/login"}
 _ORGANIZATION=${ORGANIZATION:-"A Company Making Everything (A.C.M.E)"}
+_MODE=${MODE:-'dev'}
 
 
 ##
@@ -47,6 +48,20 @@ if [ ! -f ${HTTPD_ENVVAR} ]; then
 fi
 
 #
+# enable the proxy configuration according to the mode
+#
+pushd /etc/httpd/conf.d
+    case "${_MODE}" in
+        prod)
+            ln -s z20-auth-proxy.conf.${_MODE} z20-auth-proxy.conf
+            ;;
+        *)
+            ln -s z20-auth-proxy.conf.dev z20-auth-proxy.conf
+            ;;
+    esac
+popd
+
+#
 # setup TLS certificates
 #
 TLS_CERT="/etc/pki/tls/certs/server.crt"
@@ -59,14 +74,20 @@ if [ ! -f ${TLS_CERT} ] && [ ! -f ${TLS_KEY} ]; then
 fi
 
 #
-# generate access page
+# delete development mode files or generate access page
 #
-pushd /var/www/html/access
-sed \
-    -e "s|%TARGET_LOCATION%|${_TARGET_LOCATION}|g" \
-    -e "s|%SERVER_NAME%|${_SERVER_NAME}|g" \
-    index.html.tpl > index.html
-popd
+if [ "${_MODE}" == "prod" ]; then
+    rm -fr \
+        /var/www/html/access \
+        /var/www/html/whoami
+else
+    pushd /var/www/html/access
+    sed \
+        -e "s|%TARGET_LOCATION%|${_TARGET_LOCATION}|g" \
+        -e "s|%SERVER_NAME%|${_SERVER_NAME}|g" \
+        index.html.tpl > index.html
+    popd
+fi
 
 ##
 ## SHIBD configuration

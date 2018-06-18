@@ -25,7 +25,7 @@
             ProxyPassReverse ${X_TARGET_BACKEND}/login
         </Location>
 
-        <LocationMatch "^/(?!(access|error|iam|metadata|whoami))">
+        <LocationMatch "^/(?!(error|iam|metadata))">
             ProxyPass ${X_TARGET_BACKEND}
             ProxyPassReverse ${X_TARGET_BACKEND}
         </LocationMatch>

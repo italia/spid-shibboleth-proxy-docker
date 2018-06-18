@@ -2,6 +2,7 @@
 
 ## next
 
+* Allow to run the container in production mode
 * Add checking of the aggregate IdP metadata signature
 
 ## 0.2.0 (2018-05-24)
