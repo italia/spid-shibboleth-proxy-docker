@@ -2,6 +2,7 @@
 
 ## next
 
+* Add script for system integration
 * Allow to run the container in production mode
 * Add checking of the aggregate IdP metadata signature
 
