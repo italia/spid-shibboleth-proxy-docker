@@ -1,6 +1,6 @@
 # Changelog
 
-## next
+## 0.3.1 (2018-06-22)
 
 * Fix metadata signing process
 
