@@ -1,5 +1,9 @@
 # Changelog
 
+## next
+
+* Fix metadata signing process
+
 ## 0.3.0 (2018-06-18)
 
 * Add script for system integration

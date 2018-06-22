@@ -115,7 +115,6 @@ fi
 if [ ! -f ${SAML_META_CERT} ] && [ ! -f ${SAML_META_KEY} ]
 then
     ./keygen.sh -f \
-        -e ${_ENTITY_ID} \
         -h "${_ORGANIZATION} - SAML Metadata Signature" \
         -o ${SAML_CERT_DIR} \
         -n "sp-meta"
@@ -159,7 +158,7 @@ samlsign \
     -s -k ${SAML_META_KEY} -c ${SAML_META_CERT} -f ${TMP_METADATA_3} \
     -alg http://www.w3.org/2001/04/xmldsig-more#rsa-sha256 \
     -dig http://www.w3.org/2001/04/xmlenc#sha256 \
-    | xmllint --format - > metadata.xml
+    > metadata.xml
 popd
 
 #
