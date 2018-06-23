@@ -133,9 +133,10 @@ else
     DECLS=""
 fi
 
+ID=`cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 43 | head -n 1`
 cat <<EOF
-<md:EntityDescriptor ${DECLS}entityID="${ENTITYID}">
-  <md:SPSSODescriptor protocolSupportEnumeration="${PROTENUM}">
+<md:EntityDescriptor ${DECLS}entityID="${ENTITYID}" ID="_${ID}">
+  <md:SPSSODescriptor AuthnRequestsSigned="true" WantAssertionsSigned="true" protocolSupportEnumeration="${PROTENUM}">
 EOF
 
 # Discovery BEGIN
@@ -172,7 +173,7 @@ fi
 for c in ${CERTS[@]}
 do
 cat << EOF
-    <md:KeyDescriptor>
+    <md:KeyDescriptor use="signing">
       <ds:KeyInfo>
         <ds:X509Data>
           <ds:X509Certificate>
@@ -287,6 +288,7 @@ EOF
 done
 
 cat <<EOF 
+    %ACS%
   </md:SPSSODescriptor>
 EOF
 
