@@ -259,9 +259,15 @@ do
   count=0
   while [ $count -lt ${#ACS[*]} ]
   do
-    cat <<EOF
-    <md:AssertionConsumerService Binding="${ACS[$count]}" Location="https://$h/Shibboleth.sso/${ACSLOC[$count]}" index="$((index+1))"/>
+    if [ $count -eq 0 ]; then
+      cat <<EOF
+    <md:AssertionConsumerService Binding="${ACS[$count]}" Location="https://$h/Shibboleth.sso/${ACSLOC[$count]}" index="$index" isDefault="true"/>
 EOF
+    else
+      cat <<EOF
+    <md:AssertionConsumerService Binding="${ACS[$count]}" Location="https://$h/Shibboleth.sso/${ACSLOC[$count]}" index="$index"/>
+EOF
+    fi
     let "count++"
     let "index++"
   done
