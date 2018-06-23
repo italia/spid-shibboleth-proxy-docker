@@ -127,12 +127,10 @@ popd
 
 TMP_METADATA_1=`mktemp`
 TMP_METADATA_2=`mktemp`
-TMP_METADATA_3=`mktemp`
-
 ID=`cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 43 | head -n 1`
 
 pushd /etc/shibboleth
-./metagen.sh \
+/usr/local/bin/metagen.sh \
     -c ${SAML_CERT} \
     -h ${_SERVER_NAME} \
     -e ${_ENTITY_ID} \
@@ -145,21 +143,21 @@ popd
 
 pushd /opt/shibboleth-sp/metadata
 echo $_SPID_ACS > acs.xml
-xsltproc /opt/spid-metadata/transform.xsl ${TMP_METADATA_1} > ${TMP_METADATA_2}
 sed \
-    -e "s/%ID%/${ID}/g" \
     -e "s/Shibboleth.sso/iam/g" \
-    -f /opt/spid-metadata/sed.rules ${TMP_METADATA_2} > ${TMP_METADATA_3}
+    -f /opt/spid-metadata/sed.rules ${TMP_METADATA_1} > ${TMP_METADATA_2}
 rm -f acs.xml
 popd
 
 pushd /opt/shibboleth-sp/metadata
 samlsign \
-    -s -k ${SAML_META_KEY} -c ${SAML_META_CERT} -f ${TMP_METADATA_3} \
+    -s -k ${SAML_META_KEY} -c ${SAML_META_CERT} -f ${TMP_METADATA_2} \
     -alg http://www.w3.org/2001/04/xmldsig-more#rsa-sha256 \
     -dig http://www.w3.org/2001/04/xmlenc#sha256 \
     > metadata.xml
 popd
+
+rm ${TMP_METADATA_1} ${TMP_METADATA_2}
 
 #
 # generate Shibboleth SP configuration
