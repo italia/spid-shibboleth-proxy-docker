@@ -303,9 +303,9 @@ if [ -n "$ORGNAME" ] ; then
   fi
   cat <<EOF
   <md:Organization>
-    <md:OrganizationName xml:lang="en">$ORGNAME</md:OrganizationName>
-    <md:OrganizationDisplayName xml:lang="en">$ORGNAME</md:OrganizationDisplayName>
-    <md:OrganizationURL xml:lang="en">$URL</md:OrganizationURL>
+    <md:OrganizationName xml:lang="it">$ORGNAME</md:OrganizationName>
+    <md:OrganizationDisplayName xml:lang="it">$ORGNAME</md:OrganizationDisplayName>
+    <md:OrganizationURL xml:lang="it">$URL</md:OrganizationURL>
   </md:Organization>
 EOF
 fi
