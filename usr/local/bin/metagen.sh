@@ -95,16 +95,10 @@ fi
 
 if [ $LOGOUT -eq 1 -o $NAMEIDMGMT -eq 1 ] ; then
     SAML2=1
-    SLO[${#SLO[*]}]=$SAML20SOAP
     SLO[${#SLO[*]}]=$SAML20REDIRECT
     SLO[${#SLO[*]}]=$SAML20POST
-    SLOLOC[${#SLOLOC[*]}]="SOAP"
     SLOLOC[${#SLOLOC[*]}]="Redirect"
     SLOLOC[${#SLOLOC[*]}]="POST"
-    if [ $ARTIFACT -eq 1 ] ; then
-        SLO[${#SLO[*]}]=$SAML20ART
-        SLOLOC[${#SLOLOC[*]}]="Artifact"
-    fi
 fi
 
 if [ $SAML1 -eq 1 -a $SAML2 -eq 1 ] ; then
@@ -118,13 +112,6 @@ fi
 if [ $SAML2 -eq 1 ] ; then
     ACS[${#ACS[*]}]=$SAML20POST
     ACSLOC[${#ACSLOC[*]}]="SAML2/POST"
-    ACS[${#ACS[*]}]=$SAML20POSTSS
-    ACSLOC[${#ACSLOC[*]}]="SAML2/POST-SimpleSign"
-    if [ $ARTIFACT -eq 1 ] ; then
-        ACS[${#ACS[*]}]=$SAML20ART
-        ACSLOC[${#ACSLOC[*]}]="SAML2/Artifact"
-    fi
-    ACS[${#ACS[*]}]=$SAML20PAOS
     ACSLOC[${#ACSLOC[*]}]="SAML2/ECP"
 fi
 
