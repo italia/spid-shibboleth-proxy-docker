@@ -1,5 +1,10 @@
 # Changelog
 
+## next
+
+* Hack the metagen.sh script (cloned under /usr/local/bin) in order to match
+  the SPID requirements
+
 ## 0.3.1 (2018-06-22)
 
 * Fix metadata signing process

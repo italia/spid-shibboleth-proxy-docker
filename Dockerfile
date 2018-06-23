@@ -46,8 +46,10 @@ COPY ./etc/shibboleth/ /etc/shibboleth/
 COPY ./etc/httpd/conf.d/ /etc/httpd/conf.d/
 
 # copy bootstrap script
-COPY ./usr/local/bin/docker-bootstrap.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-bootstrap.sh
+COPY ./usr/local/bin/ /usr/local/bin/
+RUN chmod +x \
+    /usr/local/bin/docker-bootstrap.sh \
+    /usr/local/bin/metagen.sh
 
 # run it
 EXPOSE 80 443
