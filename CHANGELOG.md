@@ -2,6 +2,9 @@
 
 ## next
 
+* Update signing (rsa-sha512) and digest (sha512) algorithm
+* Remove double KeyName in SP requests signature
+* Fix Shibboleth SP configuration
 * Hack the metagen.sh script (cloned under /usr/local/bin) in order to match
   the SPID requirements
 
