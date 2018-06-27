@@ -107,7 +107,6 @@ pushd /etc/shibboleth
 if [ ! -f ${SAML_CERT} ] && [ ! -f ${SAML_KEY} ]
 then
     ./keygen.sh -f \
-        -e ${_ENTITY_ID} \
         -h "${_ORGANIZATION} - SAML Signature" \
         -o ${SAML_CERT_DIR}
 fi
