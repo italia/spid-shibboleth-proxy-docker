@@ -2,6 +2,7 @@
 
 ## next
 
+* Fix Shibboleth SP configuration
 * Hack the metagen.sh script (cloned under /usr/local/bin) in order to match
   the SPID requirements
 

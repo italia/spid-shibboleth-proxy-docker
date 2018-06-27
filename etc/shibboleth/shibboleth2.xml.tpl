@@ -40,7 +40,8 @@
             <!-- Logout -->
             <LogoutInitiator type="Chaining" Location="/Logout">
                 <LogoutInitiator type="SAML2"
-                    outgoingBindings="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+                    outgoingBindings="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST
+                                      urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
                     signing="true"/>
                 <LogoutInitiator type="Local" signing="true"/>
             </LogoutInitiator>
