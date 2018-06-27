@@ -6,7 +6,8 @@
 
     <ApplicationDefaults entityID="%ENTITY_ID%"
         REMOTE_USER="eppn persistent-id targeted-id" signing="true"
-        signingAlg="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" encryption="false"
+        signingAlg="http://www.w3.org/2001/04/xmldsig-more#rsa-sha512" encryption="false"
+        digestAlg="http://www.w3.org/2001/04/xmlenc#sha512"
         authnContextClassRef="https://www.spid.gov.it/SpidL1" authnContextComparison="exact"
         NameIDFormat="urn:oasis:names:tc:SAML:2.0:nameid-format:transient">
 
