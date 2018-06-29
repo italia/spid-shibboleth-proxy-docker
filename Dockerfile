@@ -26,12 +26,23 @@ COPY ./etc/yum.repos.d/shibboleth.repo /etc/yum.repos.d/
 # install dependencies
 RUN yum install -y \
         httpd \
+        java-1.8.0-openjdk-headless \
         libxslt \
         mod_php \
         mod_ssl \
         opensaml-bin \
         shibboleth.x86_64 \
+        unzip \
     && yum -y clean all
+
+# install xmlsectools
+WORKDIR /tmp
+RUN curl http://shibboleth.net/downloads/tools/xmlsectool/latest/xmlsectool-2.0.0-bin.zip > xmlsectool.zip \
+    && unzip xmlsectool.zip \
+    && mv xmlsectool-2.0.0 /opt/xmlsectool \
+    && rm -f xmlsectool.zip \
+    && yum remove -y \
+        unzip
 
 # add static pages
 COPY ./var/www/html/access /var/www/html/access
