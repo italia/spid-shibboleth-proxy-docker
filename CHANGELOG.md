@@ -1,5 +1,9 @@
 # Changelog
 
+## devel
+
+* Revise httpd security configuration (TLS, security headers)
+
 ## 0.4.0 (2018-07-06)
 
 * Fix the order of SP metadata elements
