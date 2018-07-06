@@ -27,10 +27,8 @@ COPY ./etc/yum.repos.d/shibboleth.repo /etc/yum.repos.d/
 RUN yum install -y \
         httpd \
         java-1.8.0-openjdk-headless \
-        libxslt \
         mod_php \
         mod_ssl \
-        opensaml-bin \
         shibboleth.x86_64 \
         unzip \
     && yum -y clean all
