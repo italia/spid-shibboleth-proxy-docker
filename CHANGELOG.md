@@ -2,6 +2,8 @@
 
 ## next
 
+* Fix the order of SP metadata elements
+* Substitute `samlsign` with `xmlsectool`
 * Update signing (rsa-sha512) and digest (sha512) algorithm
 * Remove double KeyName in SP requests signature
 * Fix Shibboleth SP configuration

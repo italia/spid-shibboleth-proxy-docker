@@ -187,13 +187,6 @@ cat << EOF
 EOF
 done
 
-for f in ${FORMATS[@]}
-do
-cat << EOF
-    <md:NameIDFormat>$f</md:NameIDFormat>
-EOF
-done
-
 # Logout BEGIN
 if [ $LOGOUT -eq 1 ] ; then
 
@@ -223,6 +216,13 @@ done
 
 fi
 # Logout END
+
+for f in ${FORMATS[@]}
+do
+cat << EOF
+    <md:NameIDFormat>$f</md:NameIDFormat>
+EOF
+done
 
 # NameID Mgmt BEGIN
 if [ $NAMEIDMGMT -eq 1 ] ; then

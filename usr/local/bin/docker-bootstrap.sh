@@ -149,11 +149,12 @@ rm -f acs.xml
 popd
 
 pushd /opt/shibboleth-sp/metadata
-samlsign \
-    -s -k ${SAML_META_KEY} -c ${SAML_META_CERT} -f ${TMP_METADATA_2} \
-    -alg http://www.w3.org/2001/04/xmldsig-more#rsa-sha256 \
-    -dig http://www.w3.org/2001/04/xmlenc#sha256 \
-    > metadata.xml
+JAVA_HOME=/usr/lib/jvm/jre /opt/xmlsectool/xmlsectool.sh --sign \
+    --inFile ${TMP_METADATA_2} --outFile ./metadata.xml \
+    --digestAlgorithm http://www.w3.org/2001/04/xmlenc#sha512 \
+    --signatureAlgorithm http://www.w3.org/2001/04/xmldsig-more#rsa-sha512 \
+    --key ${SAML_META_KEY} --certificate ${SAML_META_CERT} \
+    --referenceIdAttributeName ID
 popd
 
 rm ${TMP_METADATA_1} ${TMP_METADATA_2}
