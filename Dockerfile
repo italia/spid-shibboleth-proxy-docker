@@ -35,10 +35,15 @@ RUN yum install -y \
 
 # install xmlsectools
 WORKDIR /tmp
-RUN curl http://shibboleth.net/downloads/tools/xmlsectool/latest/xmlsectool-2.0.0-bin.zip > xmlsectool.zip \
+RUN curl https://shibboleth.net/downloads/PGP_KEYS 2>/dev/null | gpg --import \
+    && curl http://shibboleth.net/downloads/tools/xmlsectool/latest/xmlsectool-2.0.0-bin.zip > xmlsectool.zip \
+    && curl http://shibboleth.net/downloads/tools/xmlsectool/latest/xmlsectool-2.0.0-bin.zip.asc > xmlsectool.zip.asc \
+    && gpg --verify xmlsectool.zip.asc xmlsectool.zip \
     && unzip xmlsectool.zip \
     && mv xmlsectool-2.0.0 /opt/xmlsectool \
-    && rm -f xmlsectool.zip \
+    && rm -f \
+        xmlsectool.zip \
+        xmlsectool.zip.asc \
     && yum remove -y \
         unzip
 
