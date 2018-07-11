@@ -31,6 +31,9 @@
                         NameQualifier="%ENTITY_ID%">
                         %ENTITY_ID%
                     </saml:Issuer>
+                    <samlp:NameIDPolicy
+                        Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
+                    />
                 </samlp:AuthnRequest>
             </SessionInitiator>
 
