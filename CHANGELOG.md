@@ -2,6 +2,8 @@
 
 ## devel
 
+* Remove `AllowCreate` from `NameIDPolicy` according to
+  [SPID - Avviso 5](https://www.agid.gov.it/sites/default/files/repository_files/documentazione/spid-avviso-n5-regole-tecniche-errata-corrige.pdf)
 * Revise httpd security configuration (TLS, security headers)
 
 ## 0.4.0 (2018-07-06)
