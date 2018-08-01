@@ -45,6 +45,7 @@ HTTPD_ENVVAR="/etc/httpd/conf.d/z00-envvar.conf"
 if [ ! -f ${HTTPD_ENVVAR} ]; then
     echo "Define X_SERVER_NAME ${_SERVER_NAME}" >> ${HTTPD_ENVVAR}
     echo "Define X_TARGET_BACKEND ${_TARGET_BACKEND}" >> ${HTTPD_ENVVAR}
+    echo "Define X_TARGET_LOCATION ${_TARGET_LOCATION}" >> ${HTTPD_ENVVAR}
 fi
 
 #
