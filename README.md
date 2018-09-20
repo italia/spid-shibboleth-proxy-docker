@@ -39,19 +39,11 @@ l'Italia Digitale.
           ENTITY_ID: 'https://my.auth.proxy.com'
           TARGET_BACKEND: 'https://mytargetapp.my.cloud.provider.com'
           TARGET_LOCATION: '/login'
-          SPID_ACS: |
-            <md:AttributeConsumingService index="1">
-              <md:ServiceName xml:lang="it">set1</md:ServiceName>
-              <md:RequestedAttribute Name="name"/>
-              <md:RequestedAttribute Name="familyName"/>
-              <md:RequestedAttribute Name="fiscalNumber"/>
-              <md:RequestedAttribute Name="email"/>
-            </md:AttributeConsumingService>
-            <md:AttributeConsumingService index="2">
-              <md:ServiceName xml:lang="it">set2</md:ServiceName>
-              <md:RequestedAttribute Name="spidCode"/>
-              <md:RequestedAttribute Name="fiscalNumber"/>
-            </md:AttributeConsumingService>
+          ACS_INDEXES: '1;2'
+          ACS_1_LABEL: 'set 1'
+          ACS_1_ATTRS: 'name;familyName;fiscalNumber;email'
+          ACS_2_LABEL: 'set 2'
+          ACS_2_ATTRS: 'spidCode;fiscalNumber'
     ```
 
     You can use `docker-compose.quickstart.yml`, which is available in this
@@ -151,19 +143,11 @@ l'Italia Digitale.
           ENTITY_ID: 'https://my.auth.proxy.com'
           TARGET_BACKEND: 'https://mytargetapp.my.cloud.provider.com'
           TARGET_LOCATION: '/login'
-          SPID_ACS: |
-            <md:AttributeConsumingService index="1">
-              <md:ServiceName xml:lang="it">set1</md:ServiceName>
-              <md:RequestedAttribute Name="name"/>
-              <md:RequestedAttribute Name="familyName"/>
-              <md:RequestedAttribute Name="fiscalNumber"/>
-              <md:RequestedAttribute Name="email"/>
-            </md:AttributeConsumingService>
-            <md:AttributeConsumingService index="2">
-              <md:ServiceName xml:lang="it">set2</md:ServiceName>
-              <md:RequestedAttribute Name="spidCode"/>
-              <md:RequestedAttribute Name="fiscalNumber"/>
-            </md:AttributeConsumingService>
+          ACS_INDEXES: '1;2'
+          ACS_1_LABEL: 'set 1'
+          ACS_1_ATTRS: 'name;familyName;fiscalNumber;email'
+          ACS_2_LABEL: 'set 2'
+          ACS_2_ATTRS: 'spidCode;fiscalNumber'
     ```
 
     Be sure that `MODE` envvar is set to `prod`.
@@ -193,3 +177,29 @@ l'Italia Digitale.
     Once authenticated, the callback (`/login`) will proxy the response to
     your backend (`TARGET_BACKEND`) by including within the request headers
     the authentication result.
+
+## How to define AttributeConsumingService elements
+
+The `AttributeConsumingService` (ACS) elements can be defined by using a set
+of properly named environment variables.
+
+Firstly, you have to declare the indexes of your ACSs by defining the
+`ACS_INDEXES` variable with all the indexes separated by a `;`.
+
+Then, for each ACS, you have to define the label with `ACS_<INDEX>_LABEL` and
+the list of the attributes with `ACS_<INDEX>_ATTRS`. The attributes must be
+specified as `;` separated list.
+
+For instance, to the define two ACSs (with index `1` and `27`) where the
+first includes the attributes `spidCode` and `fiscalNumber` while the latter
+`name` and `placeOfBirth`, the environment variables must be defined and set
+as follows
+
+```.yaml
+environment:
+  ACS_INDEXES: '1;27'
+  ACS_1_LABEL: 'My First Set'
+  ACS_1_ATTRS: 'spidCode;fiscalNumber'
+  ACS_27_LABEL: 'My Second Set'
+  ACS_27_ATTRS: 'name;placeOfBirth'
+```
