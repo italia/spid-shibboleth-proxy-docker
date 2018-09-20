@@ -141,7 +141,25 @@ pushd /etc/shibboleth
 popd
 
 pushd /opt/shibboleth-sp/metadata
-echo $_SPID_ACS > acs.xml
+cat /dev/null > acs.xml
+for idx in $(echo ${ACS_INDEXES} | tr ';' ' '); do
+    _label="ACS_${idx}_LABEL"
+    _attrs="ACS_${idx}_ATTRS"
+
+    cat >> acs.xml <<EOF
+<md:AttributeConsumingService index="${idx}">
+  <md:ServiceName xml:lang="it">${!_label}</md:ServiceName>
+EOF
+
+    for attr in $(echo ${!_attrs} | tr ';' ' '); do
+        echo "  <md:RequestedAttribute Name=\"${attr}\"/>" >> acs.xml
+    done
+
+    cat >> acs.xml <<EOF
+</md:AttributeConsumingService>
+EOF
+done
+
 sed \
     -e "s/Shibboleth.sso/iam/g" \
     -f /opt/spid-metadata/sed.rules ${TMP_METADATA_1} > ${TMP_METADATA_2}

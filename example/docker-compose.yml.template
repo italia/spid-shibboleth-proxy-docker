@@ -27,12 +27,13 @@ services:
       ENTITY_ID: 'https://${SERVER_NAME}'
       TARGET_BACKEND: 'http://backend_app:8080'
       TARGET_LOCATION: '/login'
-      SPID_ACS: |
-        <md:AttributeConsumingService index="0">
-          <md:ServiceName xml:lang="it">set1</md:ServiceName>
-          <md:RequestedAttribute Name="fiscalNumber"/>
-          <md:RequestedAttribute Name="name"/>
-        </md:AttributeConsumingService>
+      ACS_INDEXES: '0;99;100'
+      ACS_0_LABEL: 'base set'
+      ACS_0_ATTRS: 'fiscalNumber;name'
+      ACS_99_LABEL: 'eIDAS Natural Person Minimum Attribute Set'
+      ACS_99_ATTRS: 'spidCode;name;familyName;dateOfBirth'
+      ACS_100_LABEL: 'eIDAS Natural Person Full Attribute Set'
+      ACS_100_ATTRS: 'spidCode;name;familyName;dateOfBirth;placeOfBirth;address;gender'
     depends_on:
       - backend_app
 #   networks:
