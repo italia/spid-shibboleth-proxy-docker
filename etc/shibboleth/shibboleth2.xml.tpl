@@ -80,6 +80,23 @@
             file="/opt/shibboleth-sp/metadata/idp.spid.gov.it.xml"
             id="https://idp.spid.gov.it" />
 
+        <MetadataProvider
+            type="XML"
+            validate="true"
+            uri="https://validator.spid.gov.it/metadata.xml"
+            backingFilePath="validator.xml"
+            reloadInterval="3600">
+            <MetadataFilter
+                type="Signature"
+                certificate="/opt/shibboleth-sp/metadata/validator.pem"/>
+        </MetadataProvider>
+
+        <MetadataProvider
+            type="XML"
+            validate="true"
+            path="/opt/shibboleth-sp/metadata/validator.xml"
+            id="https://validator.spid.gov.it" />
+
         <!-- Attributes -->
         <AttributeExtractor type="XML" validate="true" reloadChanges="true" path="attribute-map.xml"/>
         <AttributeResolver type="Query" subjectMatch="true"/>
