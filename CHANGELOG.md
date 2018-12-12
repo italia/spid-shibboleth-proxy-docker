@@ -2,6 +2,7 @@
 
 ## devel
 
+* Enable SPID SP validator
 * Enable the use of `TARGET_LOCATION` environment variable
 * Generate the `<AttributeConsumingService>` elements according to the
   defined environment variables
