@@ -38,5 +38,10 @@ var config = {
         "url": "https://${SERVER_NAME}/iam/Login?target=https://${SERVER_NAME}/login&entityID=https://idp.spid.gov.it",
         "title": "Accedi a SPID con Namirial",
         "logo": "spid-idp-namirialid.svg"
+    },
+    "validator": {
+        "url": "https://${SERVER_NAME}/iam/Login?target=https://${SERVER_NAME}/login&entityID=https://validator.spid.gov.it",
+        "title": "VALIDATOR",
+        "logo": "spid-idp-dummy.svg"
     }
 };
