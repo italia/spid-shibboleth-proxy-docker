@@ -66,7 +66,7 @@
 
         <MetadataProvider type="XML"
             validate="true"
-            uri="https://registry.spid.gov.it/metadata/idp/spid-entities-idps.xml"
+            url="https://registry.spid.gov.it/metadata/idp/spid-entities-idps.xml"
             backingFilePath="spid-entities-idps.xml"
             reloadInterval="3600">
             <MetadataFilter
@@ -77,13 +77,13 @@
         <MetadataProvider
             type="XML"
             validate="true"
-            file="/opt/shibboleth-sp/metadata/idp.spid.gov.it.xml"
+            path="/opt/shibboleth-sp/metadata/idp.spid.gov.it.xml"
             id="https://idp.spid.gov.it" />
 
         <MetadataProvider
             type="XML"
             validate="true"
-            uri="https://validator.spid.gov.it/metadata.xml"
+            url="https://validator.spid.gov.it/metadata.xml"
             backingFilePath="validator.xml"
             reloadInterval="3600">
             <MetadataFilter
