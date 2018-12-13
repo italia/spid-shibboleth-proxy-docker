@@ -116,6 +116,14 @@ app.get('/login', (req, res) => {
         error: 'Invalid attribute(s)',
         desc: 'No attributes were provided',
       });
+    } else if (!(!address && !companyName && !countyOfBirth && !dateOfBirth
+        && !digitalAddress && !email && !expirationDate && !familyName
+        && fiscalNumber && !gender && !idCard && !ivaCode && !mobilePhone
+        && name && !placeOfBirth && !registeredOffice && !spidCode)) {
+      res.send({
+        error: 'Invalid attribute(s)',
+        desc: 'A different attribute set was provided',
+      });
     } else if (!address && !companyName && !countyOfBirth && !dateOfBirth
         && !digitalAddress && !email && !expirationDate && !familyName
         && fiscalNumber && !gender && !idCard && !ivaCode && !mobilePhone
@@ -125,7 +133,9 @@ app.get('/login', (req, res) => {
       req.session.name = name;
       res.redirect('/');
     } else {
-      res.status(400).send('Bad request');
+      res.send({
+        error: 'Error',
+      });
     }
   }
 });
