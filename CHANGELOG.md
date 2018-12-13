@@ -2,6 +2,7 @@
 
 ## devel
 
+* Add backend-side checks
 * Update SPID registry certificate
 * Make logging and security policy configurable
 * Revise Shibboleth SP configuration (align to 3.x branch)
