@@ -2,6 +2,9 @@
 
 ## devel
 
+* Update SPID registry certificate
+* Make logging and security policy configurable
+* Revise Shibboleth SP configuration (align to 3.x branch)
 * Enable SPID SP validator
 * Enable the use of `TARGET_LOCATION` environment variable
 * Generate the `<AttributeConsumingService>` elements according to the
