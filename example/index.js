@@ -20,6 +20,11 @@ const session = require('express-session');
 
 const PORT = 8080;
 const SERVER_NAME = process.env.SERVER_NAME || 'localhost';
+const ALLOWED_AUTHN_CONTEXTS = [
+  'https://www.spid.gov.it/SpidL1',
+  'https://www.spid.gov.it/SpidL2',
+  'https://www.spid.gov.it/SpidL3',
+];
 
 const app = express();
 
@@ -52,14 +57,30 @@ app.get('/', (req, res) => {
 app.get('/login', (req, res) => {
   const fiscalNumber = req.get('FISCALNUMBER');
   const name = req.get('NAME');
+  const authnContext = req.get('Shib-AuthnContext-Class');
 
-  if (fiscalNumber && name) {
-    console.log(`Got login headers (${fiscalNumber}, ${name})`);
-    req.session.fiscalNumber = fiscalNumber;
-    req.session.name = name;
-    res.redirect('/');
+  if (!ALLOWED_AUTHN_CONTEXTS.includes(authnContext)) {
+    res.send({
+      error: 'Invalid AuthnContextClass',
+      desc: `Value not allowed (${authnContext})`
+    });
   } else {
-    res.status(400).send('Bad request');
+    // NOTE: this check is aligned to the Shibboleth configuration where the
+    //       comarison is set to "exact" and the default level is
+    //       "https://www.spid.gov.it/SpidL1"
+    if (authnContext !== 'https://www.spid.gov.it/SpidL1') {
+      res.send({
+        error: 'Invalid AuthnContextClass',
+        desc: `Requested https://www.spid.gov.it/SpidL1 with comparison exact (${authnContext})`,
+      });
+    } else if (fiscalNumber && name) {
+      console.log(`Got login headers (${fiscalNumber}, ${name})`);
+      req.session.fiscalNumber = fiscalNumber;
+      req.session.name = name;
+      res.redirect('/');
+    } else {
+      res.status(400).send('Bad request');
+    }
   }
 });
 
