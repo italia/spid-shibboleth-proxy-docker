@@ -16,7 +16,7 @@
         digestAlg="http://www.w3.org/2001/04/xmlenc#sha512"
         authnContextClassRef="https://www.spid.gov.it/SpidL1" authnContextComparison="exact"
         NameIDFormat="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
-        policyId="default"
+        policyId="default" requireSignedAssertions="true"
         cipherSuites="DEFAULT:!EXP:!LOW:!aNULL:!eNULL:!DES:!IDEA:!SEED:!RC4:!3DES:!kRSA:!SSLv2:!SSLv3:!TLSv1:!TLSv1.1">
 
         <!--
@@ -41,7 +41,7 @@
                 <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
                     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                     Version="2.0" ID="placeholder.example.com" IssueInstant="1970-01-01T00:00:00Z"
-                    AttributeConsumingServiceIndex="1" ForceAuthn="true">
+                    AttributeConsumingServiceIndex="0" ForceAuthn="true">
                     <saml:Issuer
                         Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity"
                         NameQualifier="%ENTITY_ID%">
@@ -55,7 +55,8 @@
 
             <md:AssertionConsumerService
                 Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-                Location="/SAML2/POST" index="0"/>
+                Location="/SAML2/POST" index="0"
+                conf:policyId="default" conf:signing="true"/>
 
             <!-- Logout -->
             <LogoutInitiator type="Chaining" Location="/Logout">
