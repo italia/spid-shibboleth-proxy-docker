@@ -25,6 +25,25 @@ const ALLOWED_AUTHN_CONTEXTS = [
   'https://www.spid.gov.it/SpidL2',
   'https://www.spid.gov.it/SpidL3',
 ];
+const ATTRIBUTES = [
+  'ADDRESS',
+  'COMPANYNAME',
+  'COUNTYOFBIRTH',
+  'DATEOFBIRTH',
+  'DIGITALADDRESS',
+  'EMAIL',
+  'EXPIRATIONDATE',
+  'FAMILYNAME',
+  'FISCALNUMBER',
+  'GENDER',
+  'IDCARD',
+  'IVACODE',
+  'MOBILEPHONE',
+  'NAME',
+  'PLACEOFBIRTH',
+  'REGISTEREDOFFICE',
+  'SPIDCODE',
+];
 
 const app = express();
 
@@ -55,8 +74,24 @@ app.get('/', (req, res) => {
  * Login callback (/iam/Login?entityId=...&target=https://<SERVER_NAME>/login)
  */
 app.get('/login', (req, res) => {
+  const address = req.get('ADDRESS');
+  const companyName = req.get('COMPANYNAME');
+  const countyOfBirth = req.get('COUNTYOFBIRTH');
+  const dateOfBirth = req.get('DATEOFBIRTH');
+  const digitalAddress = req.get('DIGITALADDRESS');
+  const email = req.get('EMAIL');
+  const expirationDate = req.get('EXPIRATIONDATE');
+  const familyName = req.get('FAMILYNAME');
   const fiscalNumber = req.get('FISCALNUMBER');
+  const gender = req.get('GENDER');
+  const idCard = req.get('IDCARD');
+  const ivaCode = req.get('IVACODE');
+  const mobilePhone = req.get('MOBILEPHONE');
   const name = req.get('NAME');
+  const placeOfBirth = req.get('PLACEOFBIRTH');
+  const registeredOffice = req.get('REGISTEREDOFFICE');
+  const spidCode = req.get('SPIDCODE');
+
   const authnContext = req.get('Shib-AuthnContext-Class');
 
   if (!ALLOWED_AUTHN_CONTEXTS.includes(authnContext)) {
@@ -73,7 +108,18 @@ app.get('/login', (req, res) => {
         error: 'Invalid AuthnContextClass',
         desc: `Requested https://www.spid.gov.it/SpidL1 with comparison exact (${authnContext})`,
       });
-    } else if (fiscalNumber && name) {
+    } else if (!(address || companyName || countyOfBirth || dateOfBirth
+          || digitalAddress || email || expirationDate || familyName
+          || fiscalNumber || gender || idCard || ivaCode || mobilePhone
+          || name || placeOfBirth || registeredOffice || spidCode)) {
+      res.send({
+        error: 'Invalid attribute(s)',
+        desc: 'No attributes were provided',
+      });
+    } else if (!address && !companyName && !countyOfBirth && !dateOfBirth
+        && !digitalAddress && !email && !expirationDate && !familyName
+        && fiscalNumber && !gender && !idCard && !ivaCode && !mobilePhone
+        && name && !placeOfBirth && !registeredOffice && !spidCode) {
       console.log(`Got login headers (${fiscalNumber}, ${name})`);
       req.session.fiscalNumber = fiscalNumber;
       req.session.name = name;
