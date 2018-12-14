@@ -86,37 +86,11 @@
 
             <!-- Check the returned attributes -->
             <Handler type="AttributeChecker" Location="/AttrChecker" template="attrChecker.html" flushSession="true">
-                <AND>
-                    <OR>
-                        <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL1</Rule>
-                        <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL2</Rule>
-                        <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL3</Rule>
-                    </OR>
-                    <OR>
-                        <!-- ACS 0: base set -->
-                        <AND>
-                            <Rule require="FISCALNUMBER"/>
-                            <Rule require="NAME"/>
-                        </AND>
-                        <!-- ACS 99: eIDAS Natural Person Minimum Attribute Set -->
-                        <AND>
-                            <Rule require="DATEOFBIRTH"/>
-                            <Rule require="FAMILYNAME"/>
-                            <Rule require="NAME"/>
-                            <Rule require="SPIDCODE"/>
-                        </AND>
-                        <!-- ACS 100: eIDAS Natural Person Full Attribute Set -->
-                        <AND>
-                            <Rule require="ADDRESS"/>
-                            <Rule require="DATEOFBIRTH"/>
-                            <Rule require="FAMILYNAME"/>
-                            <Rule require="GENDER"/>
-                            <Rule require="NAME"/>
-                            <Rule require="PLACEOFBIRTH"/>
-                            <Rule require="SPIDCODE"/>
-                        </AND>
-                    </OR>
-                </AND>
+                <OR>
+                    <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL1</Rule>
+                    <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL2</Rule>
+                    <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL3</Rule>
+                </OR>
             </Handler>
         </Sessions>
 
