@@ -115,7 +115,7 @@
                             <Rule require="PLACEOFBIRTH"/>
                             <Rule require="SPIDCODE"/>
                         </AND>
-                    <OR>
+                    </OR>
                 </AND>
             </Handler>
         </Sessions>
