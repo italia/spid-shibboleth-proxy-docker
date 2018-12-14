@@ -4,20 +4,6 @@
 
     <OutOfProcess tranLogFormat="%u|%s|%IDP|%i|%ac|%t|%attr|%n|%b|%E|%S|%SS|%L|%UA|%a" />
 
-    <RequestMapper type="Native">
-        <RequestMap>
-            <Host name="%SERVER_NAME%">
-                <AccessControl>
-                    <OR>
-                        <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL1</Rule>
-                        <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL2</Rule>
-                        <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL3</Rule>
-                    </OR>
-                </AccessControl>
-            </Host>
-        </RequestMap>
-    </RequestMapper>
-
     <!--
     By default, in-memory StorageService, ReplayCache, ArtifactMap, and SessionCache
     are used. See example-shibboleth2.xml for samples of explicitly configuring them.
@@ -30,7 +16,7 @@
         digestAlg="http://www.w3.org/2001/04/xmlenc#sha512"
         authnContextClassRef="https://www.spid.gov.it/SpidL1" authnContextComparison="exact"
         NameIDFormat="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
-        policyId="default" requireSignedAssertions="true"
+        policyId="default" requireSignedAssertions="true" sessionHook="/iam/AttrChecker"
         cipherSuites="DEFAULT:!EXP:!LOW:!aNULL:!eNULL:!DES:!IDEA:!SEED:!RC4:!3DES:!kRSA:!SSLv2:!SSLv3:!TLSv1:!TLSv1.1">
 
         <!--
@@ -97,6 +83,41 @@
 
             <!-- JSON feed of discovery information. -->
             <Handler type="DiscoveryFeed" Location="/DiscoFeed"/>
+
+            <!-- Check the returned attributes -->
+            <Handler type="AttributeChecker" Location="/AttrChecker" template="attrChecker.html" flushSession="true">
+                <AND>
+                    <OR>
+                        <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL1</Rule>
+                        <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL2</Rule>
+                        <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL3</Rule>
+                    </OR>
+                    <OR>
+                        <!-- ACS 0: base set -->
+                        <AND>
+                            <Rule require="FISCALNUMBER"/>
+                            <Rule require="NAME"/>
+                        </AND>
+                        <!-- ACS 99: eIDAS Natural Person Minimum Attribute Set -->
+                        <AND>
+                            <Rule require="DATEOFBIRTH"/>
+                            <Rule require="FAMILYNAME"/>
+                            <Rule require="NAME"/>
+                            <Rule require="SPIDCODE"/>
+                        </AND>
+                        <!-- ACS 100: eIDAS Natural Person Full Attribute Set -->
+                        <AND>
+                            <Rule require="ADDRESS"/>
+                            <Rule require="DATEOFBIRTH"/>
+                            <Rule require="FAMILYNAME"/>
+                            <Rule require="GENDER"/>
+                            <Rule require="NAME"/>
+                            <Rule require="PLACEOFBIRTH"/>
+                            <Rule require="SPIDCODE"/>
+                        </AND>
+                    <OR>
+                </AND>
+            </Handler>
         </Sessions>
 
         <!--
