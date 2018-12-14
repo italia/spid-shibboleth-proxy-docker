@@ -4,6 +4,20 @@
 
     <OutOfProcess tranLogFormat="%u|%s|%IDP|%i|%ac|%t|%attr|%n|%b|%E|%S|%SS|%L|%UA|%a" />
 
+    <RequestMapper type="Native">
+        <RequestMap>
+            <Host name="%SERVER_NAME%">
+                <AccessControl>
+                    <OR>
+                        <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL1</Rule>
+                        <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL2</Rule>
+                        <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL3</Rule>
+                    </OR>
+                </AccessControl>
+            </Host>
+        </RequestMap>
+    </RequestMapper>
+
     <!--
     By default, in-memory StorageService, ReplayCache, ArtifactMap, and SessionCache
     are used. See example-shibboleth2.xml for samples of explicitly configuring them.

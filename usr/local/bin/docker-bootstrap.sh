@@ -185,6 +185,7 @@ pushd /etc/shibboleth
 sed \
     -e "s|%ENTITY_ID%|${_ENTITY_ID}|g" \
     -e "s|%ERROR_URL%|${_ERROR_URL}|g" \
+    -e "s|%SERVER_NAME%|${_SERVER_NAME}|g" \
     shibboleth2.xml.tpl > shibboleth2.xml
 popd
 
