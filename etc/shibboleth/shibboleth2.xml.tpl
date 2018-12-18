@@ -86,11 +86,14 @@
 
             <!-- Check the returned attributes -->
             <Handler type="AttributeChecker" Location="/AttrChecker" template="attrChecker.html" flushSession="true">
-                <OR>
-                    <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL1</Rule>
-                    <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL2</Rule>
-                    <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL3</Rule>
-                </OR>
+                <AND>
+                    <OR>
+                        <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL1</Rule>
+                        <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL2</Rule>
+                        <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL3</Rule>
+                    </OR>
+%ATTR_CHECK%
+                </AND>
             </Handler>
         </Sessions>
 

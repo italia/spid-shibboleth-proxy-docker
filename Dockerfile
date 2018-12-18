@@ -47,6 +47,9 @@ RUN curl https://shibboleth.net/downloads/PGP_KEYS 2>/dev/null | gpg --import \
     && yum remove -y \
         unzip
 
+# add tmp files
+COPY ./tmp/ /tmp/
+
 # add static pages
 COPY ./var/www/html/access /var/www/html/access
 COPY ./var/www/html/whoami /var/www/html/whoami

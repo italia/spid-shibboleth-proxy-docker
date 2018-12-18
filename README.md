@@ -203,3 +203,32 @@ environment:
   ACS_27_LABEL: 'My Second Set'
   ACS_27_ATTRS: 'name;placeOfBirth'
 ```
+
+The `ACS_*` environment variables are also used to configure the [`AttributeChecker`](https://wiki.shibboleth.net/confluence/display/SP3/Attribute+Checker+Handler) handler.
+The environment variables of the example will generate the following configuration
+(nested in the resulting `/etc/shibboleth/shibboleth2.xml`)
+
+```.xml
+<!-- Check the returned attributes -->
+<Handler type="AttributeChecker" Location="/AttrChecker" template="attrChecker.html" flushSession="true">
+    <AND>
+        <OR>
+            <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL1</Rule>
+            <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL2</Rule>
+            <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL3</Rule>
+        </OR>
+        <OR>
+            <!-- Check AttributeConsumingService with index 1 -->
+            <AND>
+                <Rule require="SPIDCODE"/>
+                <Rule require="FISCALNUMBER"/>
+            </AND>
+            <!-- Check AttributeConsumingService with index 27 -->
+            <AND>
+                <Rule require="NAME"/>
+                <Rule require="PLACEOFBIRTH"/>
+            </AND>
+        </OR>
+    </AND>
+</Handler>
+```
