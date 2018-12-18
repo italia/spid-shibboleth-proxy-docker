@@ -2,7 +2,7 @@
 
 ## devel
 
-* Add check on returned AuthnContextClassRef
+* Add check on returned AuthnContextClassRef and attributes
 * Add backend-side checks
 * Update SPID registry certificate
 * Make logging and security policy configurable
