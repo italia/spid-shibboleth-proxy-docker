@@ -181,13 +181,42 @@ rm ${TMP_METADATA_1} ${TMP_METADATA_2}
 #
 # generate Shibboleth SP configuration
 #
+
+# define attribute checker rules
+ATTR_CHECK="/tmp/attr-check.xml"
+cat /dev/null > ${ATTR_CHECK}
+
+echo "                    <OR>" >> ${ATTR_CHECK}
+for idx in $(echo ${ACS_INDEXES} | tr ';' ' '); do
+    _label="ACS_${idx}_LABEL"
+    _attrs="ACS_${idx}_ATTRS"
+
+    cat >> ${ATTR_CHECK} <<EOF
+                        <!-- Check AttributeConsumingService with index ${idx} -->
+                        <AND>
+EOF
+
+    for attr in $(echo ${!_attrs} | tr ';' ' '); do
+        echo "                            <Rule require=\"$(echo ${attr} | tr [:lower:] [:upper:])\"/>" >> ${ATTR_CHECK}
+    done
+
+    cat >> ${ATTR_CHECK} <<EOF
+                        </AND>
+EOF
+done
+echo "                    </OR>" >> ${ATTR_CHECK}
+
+# generate shibboleth2.xml file
 pushd /etc/shibboleth
 sed \
+    -f /tmp/attr-check.sed \
     -e "s|%ENTITY_ID%|${_ENTITY_ID}|g" \
     -e "s|%ERROR_URL%|${_ERROR_URL}|g" \
     shibboleth2.xml.tpl > shibboleth2.xml
 popd
 
+# cleanup
+rm -f ${ATTR_CHECK}
 
 #
 # killing existing shibd (if any)
