@@ -232,3 +232,62 @@ The environment variables of the example will generate the following configurati
     </AND>
 </Handler>
 ```
+
+Furthermore, `ACS_*` variables are used to generate [`SessionInitiator`](#https://wiki.shibboleth.net/confluence/display/SP3/SessionInitiator) elements.
+The environment variables of the example will generate the following configuration
+(nested in the resulting `/etc/shibboleth/shibboleth2.xml`)
+
+```.xml
+<!-- SessionInitiator for AttributeConsumingService 0 -->
+<SessionInitiator type="SAML2"
+    Location="/Login0"
+    isDefault="true"
+    entityID="https://sp.example.com"
+    outgoingBinding="urn:oasis:names:tc:SAML:profiles:SSO:request-init"
+    isPassive="false"
+    signing="true">
+    <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+        xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+        Version="2.0" ID="placeholder0.example.com" IssueInstant="1970-01-01T00:00:00Z"
+        AttributeConsumingServiceIndex="0" ForceAuthn="true">
+        <saml:Issuer
+            Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity"
+            NameQualifier="https://sp.example.com">
+            https://sp.example.com
+        </saml:Issuer>
+        <samlp:NameIDPolicy
+            Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
+        />
+    </samlp:AuthnRequest>
+</SessionInitiator>
+
+<!-- SessionInitiator for AttributeConsumingService 27 -->
+<SessionInitiator type="SAML2"
+    Location="/Login27"
+    isDefault="true"
+    entityID="https://sp.example.com"
+    outgoingBinding="urn:oasis:names:tc:SAML:profiles:SSO:request-init"
+    isPassive="false"
+    signing="true">
+    <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+        xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+        Version="2.0" ID="placeholder27.example.com" IssueInstant="1970-01-01T00:00:00Z"
+        AttributeConsumingServiceIndex="27" ForceAuthn="true">
+        <saml:Issuer
+            Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity"
+            NameQualifier="https://sp.example.com">
+            https://sp.example.com
+        </saml:Issuer>
+        <samlp:NameIDPolicy
+            Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
+        />
+    </samlp:AuthnRequest>
+</SessionInitiator>
+```
+
+With this mechanism, you can dynamically specify the `AttributeConsumingService` by using the URLs `/iam/Login0`, `/iam/Login27` and so on. For instance
+
+```
+https://sp.example.com/iam/Login0?target=https://sp.example.com/login&entityID=https://idp.spid.gov.it
+                           ^^^^^^
+```
