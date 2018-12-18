@@ -2,6 +2,7 @@
 
 ## devel
 
+* Generate `<SessionInitiator>` elements according to `ACS_*` environment variables
 * Add check on returned AuthnContextClassRef and attributes
 * Add backend-side checks
 * Update SPID registry certificate

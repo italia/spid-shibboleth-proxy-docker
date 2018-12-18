@@ -30,28 +30,7 @@
         <Sessions lifetime="1800" timeout="3600" relayState="ss:mem" handlerURL="/iam"
             checkAddress="false" handlerSSL="true" cookieProps="https">
 
-            <!-- Login -->
-            <SessionInitiator type="SAML2"
-                Location="/Login"
-                isDefault="true"
-                entityID="%ENTITY_ID%"
-                outgoingBinding="urn:oasis:names:tc:SAML:profiles:SSO:request-init"
-                isPassive="false"
-                signing="true">
-                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-                    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-                    Version="2.0" ID="placeholder.example.com" IssueInstant="1970-01-01T00:00:00Z"
-                    AttributeConsumingServiceIndex="0" ForceAuthn="true">
-                    <saml:Issuer
-                        Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity"
-                        NameQualifier="%ENTITY_ID%">
-                        %ENTITY_ID%
-                    </saml:Issuer>
-                    <samlp:NameIDPolicy
-                        Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
-                    />
-                </samlp:AuthnRequest>
-            </SessionInitiator>
+%SESSION_INITIATOR%
 
             <md:AssertionConsumerService
                 Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"

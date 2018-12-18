@@ -206,17 +206,50 @@ EOF
 done
 echo "                    </OR>" >> ${ATTR_CHECK}
 
+# define session initiator(s)
+SESSION_INITIATOR="/tmp/session-initiator.xml"
+cat /dev/null > ${SESSION_INITIATOR}
+for idx in $(echo ${ACS_INDEXES} | tr ';' ' '); do
+    cat >> ${SESSION_INITIATOR} <<EOF
+            <!-- SessionInitiator for AttributeConsumingService ${idx} -->
+            <SessionInitiator type="SAML2"
+                Location="/Login${idx}"
+                isDefault="true"
+                entityID="%ENTITY_ID%"
+                outgoingBinding="urn:oasis:names:tc:SAML:profiles:SSO:request-init"
+                isPassive="false"
+                signing="true">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+                    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                    Version="2.0" ID="placeholder${idx}.example.com" IssueInstant="1970-01-01T00:00:00Z"
+                    AttributeConsumingServiceIndex="${idx}" ForceAuthn="true">
+                    <saml:Issuer
+                        Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity"
+                        NameQualifier="%ENTITY_ID%">
+                        %ENTITY_ID%
+                    </saml:Issuer>
+                    <samlp:NameIDPolicy
+                        Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
+                    />
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+EOF
+done
+
 # generate shibboleth2.xml file
 pushd /etc/shibboleth
 sed \
     -f /tmp/attr-check.sed \
+    -f /tmp/session-initiator.sed \
+    shibboleth2.xml.tpl > shibboleth2.xml
+sed -i \
     -e "s|%ENTITY_ID%|${_ENTITY_ID}|g" \
     -e "s|%ERROR_URL%|${_ERROR_URL}|g" \
-    shibboleth2.xml.tpl > shibboleth2.xml
+    shibboleth2.xml
 popd
 
 # cleanup
-rm -f ${ATTR_CHECK}
+rm -f ${ATTR_CHECK} ${SESSION_INITIATOR}
 
 #
 # killing existing shibd (if any)
