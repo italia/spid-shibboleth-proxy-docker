@@ -1,6 +1,6 @@
 # Changelog
 
-## devel
+## 1.0.0 (2018-12-18)
 
 * Generate `<SessionInitiator>` elements according to `ACS_*` environment variables
 * Add check on returned AuthnContextClassRef and attributes
