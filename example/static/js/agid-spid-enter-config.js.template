@@ -1,42 +1,47 @@
 var config = {
     "aruba": {
-        "url": "https://${SERVER_NAME}/iam/Login?target=https://${SERVER_NAME}/login&entityID=https://idp.spid.gov.it",
+        "url": "https://${SERVER_NAME}/iam/Login0?target=https://${SERVER_NAME}/login&entityID=https://idp.spid.gov.it",
         "title": "Accedi a SPID con Aruba",
         "logo": "spid-idp-aruba.svg"
     },
     "infocert": {
-        "url": "https://${SERVER_NAME}/iam/Login?target=https://${SERVER_NAME}/login&entityID=https://idp.spid.gov.it",
+        "url": "https://${SERVER_NAME}/iam/Login0?target=https://${SERVER_NAME}/login&entityID=https://idp.spid.gov.it",
         "title": "Accedi a SPID con Infocert",
         "logo": "spid-idp-infocertid.svg"
     },
     "poste": {
-        "url": "https://${SERVER_NAME}/iam/Login?target=https://${SERVER_NAME}/login&entityID=https://idp.spid.gov.it",
+        "url": "https://${SERVER_NAME}/iam/Login0?target=https://${SERVER_NAME}/login&entityID=https://idp.spid.gov.it",
         "title": "Accedi a SPID con Poste",
         "logo": "spid-idp-posteid.svg"
     },
     "sielte": {
-        "url": "https://${SERVER_NAME}/iam/Login?target=https://${SERVER_NAME}/login&entityID=https://idp.spid.gov.it",
+        "url": "https://${SERVER_NAME}/iam/Login0?target=https://${SERVER_NAME}/login&entityID=https://idp.spid.gov.it",
         "title": "Accedi a SPID con Sielte",
         "logo": "spid-idp-sielteid.svg"
     },
     "tim": {
-        "url": "https://${SERVER_NAME}/iam/Login?target=https://${SERVER_NAME}/login&entityID=https://idp.spid.gov.it",
+        "url": "https://${SERVER_NAME}/iam/Login0?target=https://${SERVER_NAME}/login&entityID=https://idp.spid.gov.it",
         "title": "Accedi a SPID con Tim",
         "logo": "spid-idp-timid.svg"
     },
     "intesa": {
-        "url": "https://${SERVER_NAME}/iam/Login?target=https://${SERVER_NAME}/login&entityID=https://idp.spid.gov.it",
+        "url": "https://${SERVER_NAME}/iam/Login0?target=https://${SERVER_NAME}/login&entityID=https://idp.spid.gov.it",
         "title": "Accedi a SPID con Intesa",
         "logo": "spid-idp-intesaid.svg"
     },
     "register": {
-        "url": "https://${SERVER_NAME}/iam/Login?target=https://${SERVER_NAME}/login&entityID=https://idp.spid.gov.it",
+        "url": "https://${SERVER_NAME}/iam/Login0?target=https://${SERVER_NAME}/login&entityID=https://idp.spid.gov.it",
         "title": "Accedi a SPID con Register",
         "logo": "spid-idp-spiditalia.svg"
     },
     "namirial": {
-        "url": "https://${SERVER_NAME}/iam/Login?target=https://${SERVER_NAME}/login&entityID=https://idp.spid.gov.it",
+        "url": "https://${SERVER_NAME}/iam/Login0?target=https://${SERVER_NAME}/login&entityID=https://idp.spid.gov.it",
         "title": "Accedi a SPID con Namirial",
         "logo": "spid-idp-namirialid.svg"
+    },
+    "validator": {
+        "url": "https://${SERVER_NAME}/iam/Login0?target=https://${SERVER_NAME}/login&entityID=https://validator.spid.gov.it",
+        "title": "VALIDATOR",
+        "logo": "spid-idp-dummy.svg"
     }
 };

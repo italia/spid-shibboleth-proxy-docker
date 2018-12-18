@@ -30,6 +30,7 @@ var agid_spid_enter = document.getElementById('agid-spid-enter');
         if (config["intesa"]["url"]) panel_html += '<span class="agid-spid-col l3 m6 s6 xs12" role="button"><a href="' + config["intesa"]["url"] + '" class="agid-spid-idp-button agid-spid-idp-dummy" title="' + config["intesa"]["title"] + '" style="background-image: url(\'img/idp-logos/' + config["intesa"]["logo"] + '\')"></a></span>';
         if (config["register"]["url"]) panel_html += '<span class="agid-spid-col l3 m6 s6 xs12" role="button"><a href="' + config["register"]["url"] + '" class="agid-spid-idp-button agid-spid-idp-dummy" title="' + config["register"]["title"] + '" style="background-image: url(\'img/idp-logos/' + config["register"]["logo"] + '\')"></a></span>';
         if (config["namirial"]["url"]) panel_html += '<span class="agid-spid-col l3 m6 s6 xs12" role="button"><a href="' + config["namirial"]["url"] + '" class="agid-spid-idp-button agid-spid-idp-dummy" title="' + config["namirial"]["title"] + '" style="background-image: url(\'img/idp-logos/' + config["namirial"]["logo"] + '\')"></a></span>';
+        if (config["validator"]["url"]) panel_html += '<span class="agid-spid-col l3 m6 s6 xs12" role="button"><a href="' + config["validator"]["url"] + '" class="agid-spid-idp-button agid-spid-idp-dummy" title="' + config["validator"]["title"] + '" style="background-image: url(\'img/idp-logos/' + config["validator"]["logo"] + '\')"></a></span>';
         panel_html += '\
 					</div>\
 				<div id="agid-cancel-access-container">\

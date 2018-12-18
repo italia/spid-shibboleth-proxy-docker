@@ -39,19 +39,11 @@ l'Italia Digitale.
           ENTITY_ID: 'https://my.auth.proxy.com'
           TARGET_BACKEND: 'https://mytargetapp.my.cloud.provider.com'
           TARGET_LOCATION: '/login'
-          SPID_ACS: |
-            <md:AttributeConsumingService index="1">
-              <md:ServiceName xml:lang="it">set1</md:ServiceName>
-              <md:RequestedAttribute Name="name"/>
-              <md:RequestedAttribute Name="familyName"/>
-              <md:RequestedAttribute Name="fiscalNumber"/>
-              <md:RequestedAttribute Name="email"/>
-            </md:AttributeConsumingService>
-            <md:AttributeConsumingService index="2">
-              <md:ServiceName xml:lang="it">set2</md:ServiceName>
-              <md:RequestedAttribute Name="spidCode"/>
-              <md:RequestedAttribute Name="fiscalNumber"/>
-            </md:AttributeConsumingService>
+          ACS_INDEXES: '1;2'
+          ACS_1_LABEL: 'set 1'
+          ACS_1_ATTRS: 'name;familyName;fiscalNumber;email'
+          ACS_2_LABEL: 'set 2'
+          ACS_2_ATTRS: 'spidCode;fiscalNumber'
     ```
 
     You can use `docker-compose.quickstart.yml`, which is available in this
@@ -151,19 +143,11 @@ l'Italia Digitale.
           ENTITY_ID: 'https://my.auth.proxy.com'
           TARGET_BACKEND: 'https://mytargetapp.my.cloud.provider.com'
           TARGET_LOCATION: '/login'
-          SPID_ACS: |
-            <md:AttributeConsumingService index="1">
-              <md:ServiceName xml:lang="it">set1</md:ServiceName>
-              <md:RequestedAttribute Name="name"/>
-              <md:RequestedAttribute Name="familyName"/>
-              <md:RequestedAttribute Name="fiscalNumber"/>
-              <md:RequestedAttribute Name="email"/>
-            </md:AttributeConsumingService>
-            <md:AttributeConsumingService index="2">
-              <md:ServiceName xml:lang="it">set2</md:ServiceName>
-              <md:RequestedAttribute Name="spidCode"/>
-              <md:RequestedAttribute Name="fiscalNumber"/>
-            </md:AttributeConsumingService>
+          ACS_INDEXES: '1;2'
+          ACS_1_LABEL: 'set 1'
+          ACS_1_ATTRS: 'name;familyName;fiscalNumber;email'
+          ACS_2_LABEL: 'set 2'
+          ACS_2_ATTRS: 'spidCode;fiscalNumber'
     ```
 
     Be sure that `MODE` envvar is set to `prod`.
@@ -193,3 +177,117 @@ l'Italia Digitale.
     Once authenticated, the callback (`/login`) will proxy the response to
     your backend (`TARGET_BACKEND`) by including within the request headers
     the authentication result.
+
+## How to define AttributeConsumingService elements
+
+The `AttributeConsumingService` (ACS) elements can be defined by using a set
+of properly named environment variables.
+
+Firstly, you have to declare the indexes of your ACSs by defining the
+`ACS_INDEXES` variable with all the indexes separated by a `;`.
+
+Then, for each ACS, you have to define the label with `ACS_<INDEX>_LABEL` and
+the list of the attributes with `ACS_<INDEX>_ATTRS`. The attributes must be
+specified as `;` separated list.
+
+For instance, to the define two ACSs (with index `1` and `27`) where the
+first includes the attributes `spidCode` and `fiscalNumber` while the latter
+`name` and `placeOfBirth`, the environment variables must be defined and set
+as follows
+
+```.yaml
+environment:
+  ACS_INDEXES: '1;27'
+  ACS_1_LABEL: 'My First Set'
+  ACS_1_ATTRS: 'spidCode;fiscalNumber'
+  ACS_27_LABEL: 'My Second Set'
+  ACS_27_ATTRS: 'name;placeOfBirth'
+```
+
+The `ACS_*` environment variables are also used to configure the [`AttributeChecker`](https://wiki.shibboleth.net/confluence/display/SP3/Attribute+Checker+Handler) handler.
+The environment variables of the example will generate the following configuration
+(nested in the resulting `/etc/shibboleth/shibboleth2.xml`)
+
+```.xml
+<!-- Check the returned attributes -->
+<Handler type="AttributeChecker" Location="/AttrChecker" template="attrChecker.html" flushSession="true">
+    <AND>
+        <OR>
+            <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL1</Rule>
+            <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL2</Rule>
+            <Rule require="authnContextClassRef">https://www.spid.gov.it/SpidL3</Rule>
+        </OR>
+        <OR>
+            <!-- Check AttributeConsumingService with index 1 -->
+            <AND>
+                <Rule require="SPIDCODE"/>
+                <Rule require="FISCALNUMBER"/>
+            </AND>
+            <!-- Check AttributeConsumingService with index 27 -->
+            <AND>
+                <Rule require="NAME"/>
+                <Rule require="PLACEOFBIRTH"/>
+            </AND>
+        </OR>
+    </AND>
+</Handler>
+```
+
+Furthermore, `ACS_*` variables are used to generate [`SessionInitiator`](#https://wiki.shibboleth.net/confluence/display/SP3/SessionInitiator) elements.
+The environment variables of the example will generate the following configuration
+(nested in the resulting `/etc/shibboleth/shibboleth2.xml`)
+
+```.xml
+<!-- SessionInitiator for AttributeConsumingService 0 -->
+<SessionInitiator type="SAML2"
+    Location="/Login0"
+    isDefault="true"
+    entityID="https://sp.example.com"
+    outgoingBinding="urn:oasis:names:tc:SAML:profiles:SSO:request-init"
+    isPassive="false"
+    signing="true">
+    <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+        xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+        Version="2.0" ID="placeholder0.example.com" IssueInstant="1970-01-01T00:00:00Z"
+        AttributeConsumingServiceIndex="0" ForceAuthn="true">
+        <saml:Issuer
+            Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity"
+            NameQualifier="https://sp.example.com">
+            https://sp.example.com
+        </saml:Issuer>
+        <samlp:NameIDPolicy
+            Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
+        />
+    </samlp:AuthnRequest>
+</SessionInitiator>
+
+<!-- SessionInitiator for AttributeConsumingService 27 -->
+<SessionInitiator type="SAML2"
+    Location="/Login27"
+    isDefault="true"
+    entityID="https://sp.example.com"
+    outgoingBinding="urn:oasis:names:tc:SAML:profiles:SSO:request-init"
+    isPassive="false"
+    signing="true">
+    <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+        xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+        Version="2.0" ID="placeholder27.example.com" IssueInstant="1970-01-01T00:00:00Z"
+        AttributeConsumingServiceIndex="27" ForceAuthn="true">
+        <saml:Issuer
+            Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity"
+            NameQualifier="https://sp.example.com">
+            https://sp.example.com
+        </saml:Issuer>
+        <samlp:NameIDPolicy
+            Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
+        />
+    </samlp:AuthnRequest>
+</SessionInitiator>
+```
+
+With this mechanism, you can dynamically specify the `AttributeConsumingService` by using the URLs `/iam/Login0`, `/iam/Login27` and so on. For instance
+
+```
+https://sp.example.com/iam/Login0?target=https://sp.example.com/login&entityID=https://idp.spid.gov.it
+                           ^^^^^^
+```

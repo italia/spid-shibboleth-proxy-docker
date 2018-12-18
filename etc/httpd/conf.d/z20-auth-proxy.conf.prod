@@ -15,14 +15,14 @@
             ProxyPassReverse ${X_TARGET_BACKEND}/error
         </Location>
 
-        <Location "/login">
+        <Location ${X_TARGET_LOCATION}>
             AuthType shibboleth
             ShibRequestSetting requireSession 1
             Require shib-session
             ShibUseHeaders On
 
-            ProxyPass ${X_TARGET_BACKEND}/login
-            ProxyPassReverse ${X_TARGET_BACKEND}/login
+            ProxyPass ${X_TARGET_BACKEND}${X_TARGET_LOCATION}
+            ProxyPassReverse ${X_TARGET_BACKEND}${X_TARGET_LOCATION}
         </Location>
 
         <LocationMatch "^/(?!(error|iam|metadata))">

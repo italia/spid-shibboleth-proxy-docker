@@ -45,6 +45,7 @@ HTTPD_ENVVAR="/etc/httpd/conf.d/z00-envvar.conf"
 if [ ! -f ${HTTPD_ENVVAR} ]; then
     echo "Define X_SERVER_NAME ${_SERVER_NAME}" >> ${HTTPD_ENVVAR}
     echo "Define X_TARGET_BACKEND ${_TARGET_BACKEND}" >> ${HTTPD_ENVVAR}
+    echo "Define X_TARGET_LOCATION ${_TARGET_LOCATION}" >> ${HTTPD_ENVVAR}
 fi
 
 #
@@ -141,7 +142,25 @@ pushd /etc/shibboleth
 popd
 
 pushd /opt/shibboleth-sp/metadata
-echo $_SPID_ACS > acs.xml
+cat /dev/null > acs.xml
+for idx in $(echo ${ACS_INDEXES} | tr ';' ' '); do
+    _label="ACS_${idx}_LABEL"
+    _attrs="ACS_${idx}_ATTRS"
+
+    cat >> acs.xml <<EOF
+<md:AttributeConsumingService index="${idx}">
+  <md:ServiceName xml:lang="it">${!_label}</md:ServiceName>
+EOF
+
+    for attr in $(echo ${!_attrs} | tr ';' ' '); do
+        echo "  <md:RequestedAttribute Name=\"${attr}\"/>" >> acs.xml
+    done
+
+    cat >> acs.xml <<EOF
+</md:AttributeConsumingService>
+EOF
+done
+
 sed \
     -e "s/Shibboleth.sso/iam/g" \
     -f /opt/spid-metadata/sed.rules ${TMP_METADATA_1} > ${TMP_METADATA_2}
@@ -162,13 +181,75 @@ rm ${TMP_METADATA_1} ${TMP_METADATA_2}
 #
 # generate Shibboleth SP configuration
 #
+
+# define attribute checker rules
+ATTR_CHECK="/tmp/attr-check.xml"
+cat /dev/null > ${ATTR_CHECK}
+
+echo "                    <OR>" >> ${ATTR_CHECK}
+for idx in $(echo ${ACS_INDEXES} | tr ';' ' '); do
+    _label="ACS_${idx}_LABEL"
+    _attrs="ACS_${idx}_ATTRS"
+
+    cat >> ${ATTR_CHECK} <<EOF
+                        <!-- Check AttributeConsumingService with index ${idx} -->
+                        <AND>
+EOF
+
+    for attr in $(echo ${!_attrs} | tr ';' ' '); do
+        echo "                            <Rule require=\"$(echo ${attr} | tr [:lower:] [:upper:])\"/>" >> ${ATTR_CHECK}
+    done
+
+    cat >> ${ATTR_CHECK} <<EOF
+                        </AND>
+EOF
+done
+echo "                    </OR>" >> ${ATTR_CHECK}
+
+# define session initiator(s)
+SESSION_INITIATOR="/tmp/session-initiator.xml"
+cat /dev/null > ${SESSION_INITIATOR}
+for idx in $(echo ${ACS_INDEXES} | tr ';' ' '); do
+    cat >> ${SESSION_INITIATOR} <<EOF
+            <!-- SessionInitiator for AttributeConsumingService ${idx} -->
+            <SessionInitiator type="SAML2"
+                Location="/Login${idx}"
+                isDefault="true"
+                entityID="%ENTITY_ID%"
+                outgoingBinding="urn:oasis:names:tc:SAML:profiles:SSO:request-init"
+                isPassive="false"
+                signing="true">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+                    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                    Version="2.0" ID="placeholder${idx}.example.com" IssueInstant="1970-01-01T00:00:00Z"
+                    AttributeConsumingServiceIndex="${idx}" ForceAuthn="true">
+                    <saml:Issuer
+                        Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity"
+                        NameQualifier="%ENTITY_ID%">
+                        %ENTITY_ID%
+                    </saml:Issuer>
+                    <samlp:NameIDPolicy
+                        Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
+                    />
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+EOF
+done
+
+# generate shibboleth2.xml file
 pushd /etc/shibboleth
 sed \
+    -f /tmp/attr-check.sed \
+    -f /tmp/session-initiator.sed \
+    shibboleth2.xml.tpl > shibboleth2.xml
+sed -i \
     -e "s|%ENTITY_ID%|${_ENTITY_ID}|g" \
     -e "s|%ERROR_URL%|${_ERROR_URL}|g" \
-    shibboleth2.xml.tpl > shibboleth2.xml
+    shibboleth2.xml
 popd
 
+# cleanup
+rm -f ${ATTR_CHECK} ${SESSION_INITIATOR}
 
 #
 # killing existing shibd (if any)
