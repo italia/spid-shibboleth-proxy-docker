@@ -228,7 +228,7 @@ EOF
     # other attributes
     for attr in ${ATTRIBUTES[*]}; do
         if ! echo ${!_attrs} | tr [:lower:] [:upper:] | grep -w -q "${attr}"; then
-            echo "                                    <NOT><Rule require=\"$(echo ${attr} | tr [:lower:] [:upper:])\"/></NOT>" >> ${ATTR_CHECK}
+            echo "                                <NOT><Rule require=\"$(echo ${attr} | tr [:lower:] [:upper:])\"/></NOT>" >> ${ATTR_CHECK}
         fi
     done
 
