@@ -214,17 +214,28 @@ for idx in $(echo ${ACS_INDEXES} | tr ';' ' '); do
     cat >> ${ATTR_CHECK} <<EOF
                         <!-- Check AttributeConsumingService with index ${idx} -->
                         <AND>
+                            <AND>
+EOF
+
+    for attr in $(echo ${!_attrs} | tr ';' ' '); do
+        echo "      <Rule require=\"$(echo ${attr} | tr [:lower:] [:upper:])\"/>" >> ${ATTR_CHECK}
+    done
+
+    cat >> ${ATTR_CHECK} <<EOF
+                            </AND>
+                            <NOT>
+                                <AND>
 EOF
 
     for attr in ${ATTRIBUTES[*]}; do
-        if echo ${!_attrs} | tr [:lower:] [:upper:] | grep -w -q "${attr}"; then
-            echo "                            <Rule require=\"$(echo ${attr} | tr [:lower:] [:upper:])\"/>" >> ${ATTR_CHECK}
-        else
-            echo "                            <RuleRegex require=\"$(echo ${attr} | tr [:lower:] [:upper:])\">^\$</RuleRegex>" >> ${ATTR_CHECK}
+        if ! echo ${!_attrs} | tr [:lower:] [:upper:] | grep -w -q "${attr}"; then
+            echo "                                        <Rule require=\"$(echo ${attr} | tr [:lower:] [:upper:])\"/>" >> ${ATTR_CHECK}
         fi
     done
 
     cat >> ${ATTR_CHECK} <<EOF
+                                </AND>
+                            </NOT>
                         </AND>
 EOF
 done
