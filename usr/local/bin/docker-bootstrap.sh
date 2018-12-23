@@ -218,9 +218,9 @@ EOF
 
     for attr in ${ATTRIBUTES[*]}; do
         if echo ${!_attrs} | tr [:lower:] [:upper:] | grep -w -q "${attr}"; then
-            echo "                            <Rule require=\"$(echo ${attr} | tr [:lower:] [:upper:])\"/>"
+            echo "                            <Rule require=\"$(echo ${attr} | tr [:lower:] [:upper:])\"/>" >> ${ATTR_CHECK}
         else
-            echo "                            <RuleRegex require=\"$(echo ${attr} | tr [:lower:] [:upper:])\">^\$</RuleRegex>"
+            echo "                            <RuleRegex require=\"$(echo ${attr} | tr [:lower:] [:upper:])\">^\$</RuleRegex>" >> ${ATTR_CHECK}
         fi
     done
 
