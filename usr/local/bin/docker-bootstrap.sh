@@ -216,26 +216,24 @@ for idx in $(echo ${ACS_INDEXES} | tr ';' ' '); do
                         <AND>
                             <AND>
 EOF
-
+    # required attributes
     for attr in $(echo ${!_attrs} | tr ';' ' '); do
-        echo "      <Rule require=\"$(echo ${attr} | tr [:lower:] [:upper:])\"/>" >> ${ATTR_CHECK}
+        echo "                                <Rule require=\"$(echo ${attr} | tr [:lower:] [:upper:])\"/>" >> ${ATTR_CHECK}
     done
 
     cat >> ${ATTR_CHECK} <<EOF
                             </AND>
-                            <NOT>
-                                <AND>
+                            <AND>
 EOF
-
+    # other attributes
     for attr in ${ATTRIBUTES[*]}; do
         if ! echo ${!_attrs} | tr [:lower:] [:upper:] | grep -w -q "${attr}"; then
-            echo "                                        <Rule require=\"$(echo ${attr} | tr [:lower:] [:upper:])\"/>" >> ${ATTR_CHECK}
+            echo "                                    <NOT><Rule require=\"$(echo ${attr} | tr [:lower:] [:upper:])\"/></NOT>" >> ${ATTR_CHECK}
         fi
     done
 
     cat >> ${ATTR_CHECK} <<EOF
-                                </AND>
-                            </NOT>
+                            </AND>
                         </AND>
 EOF
 done
