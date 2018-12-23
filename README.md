@@ -220,13 +220,51 @@ The environment variables of the example will generate the following configurati
         <OR>
             <!-- Check AttributeConsumingService with index 1 -->
             <AND>
-                <Rule require="SPIDCODE"/>
-                <Rule require="FISCALNUMBER"/>
+                <AND>
+                    <Rule require="SPIDCODE"/>
+                    <Rule require="FISCALNUMBER"/>
+                </AND>
+                <AND>
+                    <NOT><Rule require="ADDRESS"/></NOT>
+                    <NOT><Rule require="COMPANYNAME"/></NOT>
+                    <NOT><Rule require="COUNTYOFBIRTH"/></NOT>
+                    <NOT><Rule require="DATEOFBIRTH"/></NOT>
+                    <NOT><Rule require="DIGITALADDRESS"/></NOT>
+                    <NOT><Rule require="EMAIL"/></NOT>
+                    <NOT><Rule require="EXPIRATIONDATE"/></NOT>
+                    <NOT><Rule require="FAMILYNAME"/></NOT>
+                    <NOT><Rule require="GENDER"/></NOT>
+                    <NOT><Rule require="IDCARD"/></NOT>
+                    <NOT><Rule require="IVACODE"/></NOT>
+                    <NOT><Rule require="MOBILEPHONE"/></NOT>
+                    <NOT><Rule require="NAME"/></NOT>
+                    <NOT><Rule require="PLACEOFBIRTH"/></NOT>
+                    <NOT><Rule require="REGISTEREDOFFICE"/></NOT>
+                </AND>
             </AND>
             <!-- Check AttributeConsumingService with index 27 -->
             <AND>
-                <Rule require="NAME"/>
-                <Rule require="PLACEOFBIRTH"/>
+                <AND>
+                    <Rule require="NAME"/>
+                    <Rule require="PLACEOFBIRTH"/>
+                </AND>
+                <AND>
+                    <NOT><Rule require="ADDRESS"/></NOT>
+                    <NOT><Rule require="COMPANYNAME"/></NOT>
+                    <NOT><Rule require="COUNTYOFBIRTH"/></NOT>
+                    <NOT><Rule require="DATEOFBIRTH"/></NOT>
+                    <NOT><Rule require="DIGITALADDRESS"/></NOT>
+                    <NOT><Rule require="EMAIL"/></NOT>
+                    <NOT><Rule require="EXPIRATIONDATE"/></NOT>
+                    <NOT><Rule require="FAMILYNAME"/></NOT>
+                    <NOT><Rule require="FISCALNUMBER"/></NOT>
+                    <NOT><Rule require="GENDER"/></NOT>
+                    <NOT><Rule require="IDCARD"/></NOT>
+                    <NOT><Rule require="IVACODE"/></NOT>
+                    <NOT><Rule require="MOBILEPHONE"/></NOT>
+                    <NOT><Rule require="REGISTEREDOFFICE"/></NOT>
+                    <NOT><Rule require="SPIDCODE"/></NOT>
+                </AND>
             </AND>
         </OR>
     </AND>

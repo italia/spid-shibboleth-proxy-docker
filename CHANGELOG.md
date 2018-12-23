@@ -1,5 +1,9 @@
 # Changelog
 
+## devel
+
+* Refine checks on returned attributes
+
 ## 1.0.0 (2018-12-18)
 
 * Generate `<SessionInitiator>` elements according to `ACS_*` environment variables
