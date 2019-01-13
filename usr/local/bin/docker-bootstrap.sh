@@ -182,6 +182,26 @@ rm ${TMP_METADATA_1} ${TMP_METADATA_2}
 # generate Shibboleth SP configuration
 #
 
+ATTRIBUTES=(\
+    "ADDRESS" \
+    "COMPANYNAME" \
+    "COUNTYOFBIRTH" \
+    "DATEOFBIRTH" \
+    "DIGITALADDRESS" \
+    "EMAIL" \
+    "EXPIRATIONDATE" \
+    "FAMILYNAME" \
+    "FISCALNUMBER" \
+    "GENDER" \
+    "IDCARD" \
+    "IVACODE" \
+    "MOBILEPHONE" \
+    "NAME" \
+    "PLACEOFBIRTH" \
+    "REGISTEREDOFFICE" \
+    "SPIDCODE" \
+)
+
 # define attribute checker rules
 ATTR_CHECK="/tmp/attr-check.xml"
 cat /dev/null > ${ATTR_CHECK}
@@ -194,13 +214,26 @@ for idx in $(echo ${ACS_INDEXES} | tr ';' ' '); do
     cat >> ${ATTR_CHECK} <<EOF
                         <!-- Check AttributeConsumingService with index ${idx} -->
                         <AND>
+                            <AND>
 EOF
-
+    # required attributes
     for attr in $(echo ${!_attrs} | tr ';' ' '); do
-        echo "                            <Rule require=\"$(echo ${attr} | tr [:lower:] [:upper:])\"/>" >> ${ATTR_CHECK}
+        echo "                                <Rule require=\"$(echo ${attr} | tr [:lower:] [:upper:])\"/>" >> ${ATTR_CHECK}
     done
 
     cat >> ${ATTR_CHECK} <<EOF
+                            </AND>
+                            <AND>
+EOF
+    # other attributes
+    for attr in ${ATTRIBUTES[*]}; do
+        if ! echo ${!_attrs} | tr [:lower:] [:upper:] | grep -w -q "${attr}"; then
+            echo "                                <NOT><Rule require=\"$(echo ${attr} | tr [:lower:] [:upper:])\"/></NOT>" >> ${ATTR_CHECK}
+        fi
+    done
+
+    cat >> ${ATTR_CHECK} <<EOF
+                            </AND>
                         </AND>
 EOF
 done

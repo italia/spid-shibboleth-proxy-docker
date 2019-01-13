@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.0 (2019-01-13)
+
+* Update SPID Registry signing certificate (fingerprint `CF:6F:E5:4E:9A:78:1A:F2:78:92:69:0B:A7:BF:FB:B1:8A:D1:28:B5:4D:40:06:DF:4B:06:8A:D1:4B:6D:EB:27`)
+* Refine checks on returned attributes
+
 ## 1.0.0 (2018-12-18)
 
 * Generate `<SessionInitiator>` elements according to `ACS_*` environment variables
