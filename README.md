@@ -8,6 +8,10 @@ by the application.
 SPID Auth Docker has been developed and is maintained by AgID - Agenzia per
 l'Italia Digitale.
 
+
+**DISCLAIMER: Is highly recommended to update the installed version to the latest pubblished release.**
+
+
 ## How to quickly test it
 
 1.  Create a directory to store SAML certificates and another to store log
