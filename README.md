@@ -8,6 +8,14 @@ by the application.
 SPID Auth Docker has been developed and is maintained by AgID - Agenzia per
 l'Italia Digitale.
 
+## Disclaimer
+
+It's highly recommended to use the [latest release] of the image.
+The versioning follows the [SemVer rules].
+
+[latest release]: https://github.com/italia/spid-shibboleth-proxy-docker/tree/v1.1.1
+[SemVer rules]: https://semver.org
+
 ## How to quickly test it
 
 1.  Create a directory to store SAML certificates and another to store log
