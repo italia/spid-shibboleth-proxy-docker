@@ -13,7 +13,7 @@ l'Italia Digitale.
 It's highly recommended to use the [latest release] of the image.
 The versioning follows the [SemVer rules].
 
-[latest release]: https://github.com/italia/spid-shibboleth-proxy-docker/tree/v1.1.0
+[latest release]: https://github.com/italia/spid-shibboleth-proxy-docker/tree/v1.1.1
 [SemVer rules]: https://semver.org
 
 ## How to quickly test it
