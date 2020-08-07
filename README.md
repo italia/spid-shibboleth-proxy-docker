@@ -1,3 +1,9 @@
+# End of Life Disclaimer
+
+* This repository is no longer maintained
+* The software stack included within the project does not fully implement the SPID specifications
+* The use in production is strongly discouraged.
+
 # SPID Auth Docker
 
 SPID Auth Docker is a service provider based on shibboleth that takes care of
